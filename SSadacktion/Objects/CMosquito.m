@@ -57,8 +57,8 @@
     if( (mTimeCount % 10) == 0 )
     {
         NSLog(@"change");
-        mMoveVelocityX = rand()%10;
-        mMoveVelocityY = rand()%10;
+        mMoveVelocityX = rand()%20;
+        mMoveVelocityY = rand()%20;
     }
     
     CGPoint _prePos = [self position];
@@ -92,7 +92,40 @@
     [self setPosition:_newPos];
     
     if( mTimeCount == 5 ) // 목표지점까지 갔다면 스케쥴로 끝.
+    {
         [self unschedule:@selector(movePosition)];
+        mTimeCount = 0;
+        [self schedule:@selector(moveStay) interval:scheduleTimeCount];
+    }
+}
+
+-(void)moveStay
+{
+    mTimeCount++;
+    
+    if( (mTimeCount*scheduleTimeCount) >= mTimeStay ) //제한시간 끝났을 때
+    {
+        [self unschedule:@selector(moveStay)];
+        NSLog(@"Stay 제한시간 끝");
+        mTimeCount = 0;
+        [self schedule:@selector(moveAvoid) interval:scheduleTimeCount];
+        return;
+    }
+}
+
+-(void)moveAvoid
+{
+    mTimeCount++;
+    
+    CGPoint _prePos = [self position];
+    CGPoint _newPos = CGPointMake( _prePos.x + mMoveVelocityX, _prePos.y - spotY/3 );
+    [self setPosition:_newPos];
+    
+    if( mTimeCount == 5 ) // 목표지점까지 갔다면 스케쥴로 끝.
+    {
+        [self unschedule:@selector(moveAvoid)];
+        mTimeCount = 0;
+    }
 }
 
 @end

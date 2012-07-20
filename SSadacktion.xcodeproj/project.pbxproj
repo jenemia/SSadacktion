@@ -136,6 +136,7 @@
 		F3897E3815B96A7500784468 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F3897E3715B96A7500784468 /* main.m */; };
 		F3897E3B15B96A7500784468 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F3897E3A15B96A7500784468 /* AppDelegate.m */; };
 		F3897E3E15B96A7500784468 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3897E3D15B96A7500784468 /* RootViewController.m */; };
+		F397F2AD15BA0AFB00D297E6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F397F2AC15BA0AFB00D297E6 /* GameKit.framework */; };
 		F3FA3A4B15B99843009E65C7 /* attack_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FA3A4815B99843009E65C7 /* attack_left.png */; };
 		F3FA3A4C15B99843009E65C7 /* catch_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FA3A4915B99843009E65C7 /* catch_left.png */; };
 		F3FA3A4D15B99843009E65C7 /* nomal_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FA3A4A15B99843009E65C7 /* nomal_left.png */; };
@@ -395,6 +396,7 @@
 		F3897E3C15B96A7500784468 /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		F3897E3D15B96A7500784468 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		F3897E4215B96A7500784468 /* GameConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameConfig.h; sourceTree = "<group>"; };
+		F397F2AC15BA0AFB00D297E6 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F3FA3A4815B99843009E65C7 /* attack_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attack_left.png; sourceTree = "<group>"; };
 		F3FA3A4915B99843009E65C7 /* catch_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = catch_left.png; sourceTree = "<group>"; };
 		F3FA3A4A15B99843009E65C7 /* nomal_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nomal_left.png; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F397F2AD15BA0AFB00D297E6 /* GameKit.framework in Frameworks */,
 				F3897CD815B96A7300784468 /* QuartzCore.framework in Frameworks */,
 				F3897CDA15B96A7300784468 /* OpenGLES.framework in Frameworks */,
 				F3897CDC15B96A7300784468 /* OpenAL.framework in Frameworks */,
@@ -473,6 +476,7 @@
 		F3897CC815B96A7300784468 = {
 			isa = PBXGroup;
 			children = (
+				F397F2AC15BA0AFB00D297E6 /* GameKit.framework */,
 				F3897CE715B96A7300784468 /* SSadacktion */,
 				F3897CD615B96A7300784468 /* Frameworks */,
 				F3897CD415B96A7300784468 /* Products */,

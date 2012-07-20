@@ -19,8 +19,8 @@
 -(void)startGameCenter;
 -(BOOL)isGameCenterAvailable;
 -(void)authenticateLocalPlayer;
--(void)showMatchMaker;
--(void)setRecieveDataCallback:(id)callClass selector:(SEL)selector;
--(void)sendData:(NSString *)sendData;
+//-(void)showMatchMaker;
+//-(void)setRecieveDataCallback:(id)callClass selector:(SEL)selector;
+//-(void)sendData:(NSString *)sendData;
 
 @end

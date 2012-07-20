@@ -186,5 +186,27 @@
     [super dealloc];
 }
 
+#pragma makr GKMatchmakerViewControllerDelegate
+//– matchmakerViewControllerWasCancelled: 
+- (void)matchmakerViewControllerWasCancelled:(GKMatchmakerViewController *)viewController
+{
+    
+}
+- (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFailWithError:(NSError *)error
+{
+    
+}
+
+#pragma mark GKLeaderboardViewControllerDelegate
+- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController
+{
+    
+}
+
+#pragma mark GKAchievementViewControllerDelegate
+- (void)achievementViewControllerDidFinish:(GKAchievementViewController *)viewController
+{
+    
+}
 
 @end
