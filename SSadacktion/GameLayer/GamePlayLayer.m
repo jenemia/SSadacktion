@@ -7,13 +7,14 @@
 //
 
 #import "GamePlayLayer.h"
+#import "CMosquito.h"
 
 enum{
     kTagBackground = 0,
     kTagNomalPlayer,
     kTagAttackPlayer,
-    kTagMosquite,
-    kTagIntro
+    kTagIntro,
+    kTagMosquite
 };
 
 @implementation GamePlayLayer
@@ -31,7 +32,6 @@ enum{
     {
         self.isTouchEnabled = YES;
         mGameStart = false;
-        srand(time(NULL));
         
         [self createBackground];
         [self createPlayer];
@@ -53,14 +53,18 @@ enum{
                   lastImage:@"nomal_right.png"];
         
         //모기
-        mSpriteMosquite = [[CCSprite alloc]initWithFile:@"mosquito.png"];
+        
+        mSpriteMosquite = [[CMosquito alloc]initWithFile:@"mosquito.png"];
+        
         mSpriteMosquite.anchorPoint = CGPointMake(0, 0);
-        mSpriteMosquite.position = CGPointMake(10, 400);
+        mSpriteMosquite.position = CGPointMake(10, 300);
+        mSpriteMosquite.visible = false;
         [self addChild:mSpriteMosquite z:kTagMosquite tag:kTagMosquite];
         
         //게임 접속 후 3초 후 시작
         mTimeCount = 0;
-        [self schedule:@selector(IntroStartCount) interval:1];
+        [mSpriteStartIntro runAction:[CCSequence actions:mAnimateStartIntro, [CCCallFunc actionWithTarget:self selector:@selector(IntroEnd)],nil]];
+        
     }
     return self;
 }
@@ -141,26 +145,15 @@ enum{
 }
 
 #pragma mark schedule
--(void)IntroStartCount
-{
-    NSLog(@"IntroStartCount");
-    mTimeCount++;
-    if( mTimeCount >= 3 ) //3초 이후 스케쥴러 끝. start 애니메이션 시작.
-    {
-        [self unschedule:@selector(IntroStartCount)];
-        mTimeCount = 0;
-        
-        [mSpriteStartIntro runAction:[CCSequence actions:mAnimateStartIntro, [CCCallFunc actionWithTarget:self selector:@selector(IntroEnd)],nil]];
-        NSLog(@"End");        
-    }
-}
-
 //start intro 끝나고 나서 호출됨.
 -(void)IntroEnd
 {
     mSpriteStartIntro.visible = FALSE;
     mGameStart = true;
     NSLog(@"Game StarT!!");
+    
+    mSpriteMosquite.visible = true;
+    [mSpriteMosquite moveStart];
 }
 
 #pragma mark event

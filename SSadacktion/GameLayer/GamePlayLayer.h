@@ -8,6 +8,8 @@
 
 #import "cocos2d.h"
 
+@class CMosquito;
+
 @interface GamePlayLayer : CCLayer
 
 @property (strong, nonatomic) CCSprite* mSpriteBackground;
@@ -22,7 +24,7 @@
 @property (strong, nonatomic) CCAnimate* mAnimateAttackPlayer2;
 @property (strong, nonatomic) CCAnimate* mAnimateCatchPlayer2;
 
-@property (strong, nonatomic) CCSprite* mSpriteMosquite;
+@property (strong, nonatomic) CMosquito* mSpriteMosquite;
 
 @property (nonatomic) NSInteger mTimeCount;
 @property (nonatomic) NSInteger mTimeTarget;
