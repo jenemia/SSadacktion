@@ -7,10 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GameKit/GameKit.h>
 
-
-@interface RootViewController : UIViewController {
-
+@interface RootViewController : UIViewController <GKMatchmakerViewControllerDelegate, GKLeaderboardViewControllerDelegate, GKAchievementViewControllerDelegate>
+{
+    GKMatch *myMatch;
+    SEL m_recieveDataCallback;
+    id m_setCallbackClass;
 }
+@property (nonatomic, retain) GKMatch *myMatch;
+-(void)startGameCenter;
+-(BOOL)isGameCenterAvailable;
+-(void)authenticateLocalPlayer;
+-(void)showMatchMaker;
+-(void)setRecieveDataCallback:(id)callClass selector:(SEL)selector;
+-(void)sendData:(NSString *)sendData;
 
 @end
