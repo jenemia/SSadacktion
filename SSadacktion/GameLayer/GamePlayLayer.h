@@ -11,7 +11,9 @@
 @interface GamePlayLayer : CCLayer
 
 @property (strong, nonatomic) CCSprite* mSpriteBackground;
-@property (strong, nonatomic) CCSprite* mSpritePlayer1;
-@property (strong, nonatomic) CCSprite* mSPritePlayer2;
+@property (strong, nonatomic) CCSprite* mSpriteNomalPlayer1;
+@property (strong, nonatomic) CCSprite* mSpriteAttackPlayer1;
+@property (strong, nonatomic) CCSprite* mSpriteNomalPlayer2;
+@property (strong, nonatomic) CCSprite* mSpriteAttackPlayer2;
 
 @end
