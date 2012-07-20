@@ -11,6 +11,8 @@
 @interface GamePlayLayer : CCLayer
 
 @property (strong, nonatomic) CCSprite* mSpriteBackground;
+@property (strong, nonatomic) CCSprite* mSpriteStartIntro;
+@property (strong, nonatomic) CCAnimate* mAnimateStartIntro;
 
 @property (strong, nonatomic) CCSprite* mSpriteNomalPlayer1;
 @property (strong, nonatomic) CCAnimate* mAnimateAttackPlayer1;
@@ -24,4 +26,7 @@
 
 @property (nonatomic) NSInteger mTimeCount;
 @property (nonatomic) NSInteger mTimeTarget;
+
+@property (nonatomic) BOOL mGameStart;
+
 @end

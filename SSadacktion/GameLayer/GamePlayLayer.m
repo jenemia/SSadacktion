@@ -12,29 +12,30 @@ enum{
     kTagBackground = 0,
     kTagNomalPlayer,
     kTagAttackPlayer,
-    kTagMosquite
+    kTagMosquite,
+    kTagIntro
 };
 
 @implementation GamePlayLayer
 
-@synthesize mSpriteBackground;
+@synthesize mSpriteBackground, mSpriteStartIntro, mAnimateStartIntro;
 @synthesize mSpriteNomalPlayer1, mAnimateAttackPlayer1, mAnimateCatchPlayer1;
 @synthesize mSpriteNomalPlayer2, mAnimateAttackPlayer2, mAnimateCatchPlayer2;
 @synthesize mSpriteMosquite;
 @synthesize mTimeCount, mTimeTarget;
+@synthesize mGameStart;
 
 -(id)init
 {
     if( self = [super init] )
     {
         self.isTouchEnabled = YES;
-        mSpriteBackground = [CCSprite spriteWithFile:@"background.png"];
-        mSpriteBackground.anchorPoint = CGPointMake(0, 0);
-        [mSpriteBackground setPosition:CGPointMake(0, 0)];
+        mGameStart = false;
+        srand(time(NULL));
         
-        [self addChild:mSpriteBackground z:kTagBackground tag:kTagBackground];
-        
+        [self createBackground];
         [self createPlayer];
+        
         mAnimateAttackPlayer1 = [CCAnimate alloc];
         [self createAnimate:mAnimateAttackPlayer1 runImage:@"attack_left.png" 
                   lastImage:@"nomal_left.png"];
@@ -51,22 +52,48 @@ enum{
         [self createAnimate:mAnimateCatchPlayer2 runImage:@"catch_right.png" 
                   lastImage:@"nomal_right.png"];
         
-        
+        //모기
         mSpriteMosquite = [[CCSprite alloc]initWithFile:@"mosquito.png"];
         mSpriteMosquite.anchorPoint = CGPointMake(0, 0);
         mSpriteMosquite.position = CGPointMake(10, 400);
         [self addChild:mSpriteMosquite z:kTagMosquite tag:kTagMosquite];
         
-        srand(time(NULL));
+        //게임 접속 후 3초 후 시작
         mTimeCount = 0;
-        mTimeTarget = 3;
-        [self schedule:@selector(ScheduleTimeCount) interval:1];
+        [self schedule:@selector(IntroStartCount) interval:1];
     }
     return self;
 }
 
 
 #pragma mark method
+
+-(void)createBackground
+{
+    mSpriteBackground = [CCSprite spriteWithFile:@"background.png"];
+    mSpriteBackground.anchorPoint = CGPointMake(0, 0);
+    [mSpriteBackground setPosition:CGPointMake(0, 0)];
+    
+    [self addChild:mSpriteBackground z:kTagBackground tag:kTagBackground];
+    
+    [[CCSpriteFrameCache sharedSpriteFrameCache]addSpriteFramesWithFile:@"StartIntro.plist"];
+    
+    NSMutableArray* aniFrames = [NSMutableArray array];
+    
+    for( NSInteger idx=1; idx<=5; idx++ )
+    {
+        CCSpriteFrame* frame = [[CCSpriteFrameCache sharedSpriteFrameCache]spriteFrameByName:[NSString stringWithFormat:@"0%d.png", idx]];
+        [aniFrames addObject:frame];
+    }
+    
+    CCAnimation* animation = [CCAnimation animationWithFrames:aniFrames delay:1];
+    mAnimateStartIntro = [[CCAnimate alloc]initWithAnimation:animation restoreOriginalFrame:NO];
+
+    mSpriteStartIntro = [CCSprite spriteWithSpriteFrameName:@"01.png"];
+    mSpriteStartIntro.anchorPoint = CGPointMake(0, 0);
+    mSpriteStartIntro.position = CGPointMake(50, 350);
+    [self addChild:mSpriteStartIntro z:kTagIntro tag:kTagIntro];
+}
 
 -(void)createPlayer
 {
@@ -114,30 +141,36 @@ enum{
 }
 
 #pragma mark schedule
--(void)ScheduleTimeCount
+-(void)IntroStartCount
 {
+    NSLog(@"IntroStartCount");
     mTimeCount++;
-    if( mTimeCount >= mTimeTarget )
-        [self ScheduleStop:@selector(ScheduleTimeCount)];
+    if( mTimeCount >= 3 ) //3초 이후 스케쥴러 끝. start 애니메이션 시작.
+    {
+        [self unschedule:@selector(IntroStartCount)];
+        mTimeCount = 0;
+        
+        [mSpriteStartIntro runAction:[CCSequence actions:mAnimateStartIntro, [CCCallFunc actionWithTarget:self selector:@selector(IntroEnd)],nil]];
+        NSLog(@"End");        
+    }
 }
 
--(void)ScheduleStop:(SEL)selector
+//start intro 끝나고 나서 호출됨.
+-(void)IntroEnd
 {
-    [self unschedule:selector];
-    NSLog(@"schedule out");
+    mSpriteStartIntro.visible = FALSE;
+    mGameStart = true;
+    NSLog(@"Game StarT!!");
 }
-
--(void)moveMosquito
-{
-    
-}
-
 
 #pragma mark event
 -(void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateAttackPlayer1, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateA)],nil]];
-    [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateAttackPlayer2, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateB)],nil]];
+    if( mGameStart == true )
+    {
+        [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateAttackPlayer1, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateA)],nil]];
+        [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateAttackPlayer2, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateB)],nil]];
+    }
 }
 
 -(void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
