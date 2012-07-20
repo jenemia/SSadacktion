@@ -31,4 +31,8 @@
 
 @property (nonatomic) BOOL mGameStart;
 
+@property (nonatomic) NSInteger mScore;
+@property (strong, nonatomic) CCLabelTTF* mLabelScore;
+
++(void)displayMosquito;
 @end

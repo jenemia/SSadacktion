@@ -7,6 +7,7 @@
 //
 
 #import "CMosquito.h"
+#import "GamePlayLayer.h"
 
 #define scheduleTimeCount 0.1
 #define spotX 130
@@ -24,9 +25,8 @@
         srand(time(NULL));
         mTimeCount = 0;
         mTimeTarget = 0;
-        mTimeStay = 1.5;
-        mMoveVelocityX = rand()%10;
-        mMoveVelocityY = rand()%10;
+        mMoveVelocityX = 0;
+        mMoveVelocityY = 0;
     }
     return self;
 }
@@ -35,6 +35,11 @@
 -(void)moveStart
 {
     mTimeTarget = rand()%3+2;
+    mTimeCount = 0;
+    mTimeStay = 1.5;
+    mMoveVelocityX = rand()%10;
+    mMoveVelocityY = rand()%10;
+    
     [self unscheduleAllSelectors];
     
     [self schedule:@selector(move) interval:scheduleTimeCount];
@@ -121,10 +126,13 @@
     CGPoint _newPos = CGPointMake( _prePos.x + mMoveVelocityX, _prePos.y - spotY/3 );
     [self setPosition:_newPos];
     
-    if( mTimeCount == 5 ) // 목표지점까지 갔다면 스케쥴로 끝.
+    if( mTimeCount == 5 ) // 화면 밖으로 갔다면 스케쥴로 끝.
     {
         [self unschedule:@selector(moveAvoid)];
         mTimeCount = 0;
+        [GamePlayLayer displayMosquito];
+        self.position = CGPointMake(10, 300);
+        [self moveStart];
     }
 }
 

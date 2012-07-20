@@ -14,8 +14,12 @@ enum{
     kTagNomalPlayer,
     kTagAttackPlayer,
     kTagIntro,
+    kTagLabel,
     kTagMosquite
 };
+
+CCLabelTTF* gLabelMosquitoCount;
+NSInteger gMosquitoCount;
 
 @implementation GamePlayLayer
 
@@ -25,6 +29,7 @@ enum{
 @synthesize mSpriteMosquite;
 @synthesize mTimeCount, mTimeTarget;
 @synthesize mGameStart;
+@synthesize mScore,mLabelScore;
 
 -(id)init
 {
@@ -32,6 +37,8 @@ enum{
     {
         self.isTouchEnabled = YES;
         mGameStart = false;
+        mScore = 0;
+        gMosquitoCount = 0;
         
         [self createBackground];
         [self createPlayer];
@@ -52,8 +59,9 @@ enum{
         [self createAnimate:mAnimateCatchPlayer2 runImage:@"catch_right.png" 
                   lastImage:@"nomal_right.png"];
         
-        //모기
+        [self createLabels];
         
+        //모기        
         mSpriteMosquite = [[CMosquito alloc]initWithFile:@"mosquito.png"];
         
         mSpriteMosquite.anchorPoint = CGPointMake(0, 0);
@@ -95,7 +103,7 @@ enum{
 
     mSpriteStartIntro = [CCSprite spriteWithSpriteFrameName:@"01.png"];
     mSpriteStartIntro.anchorPoint = CGPointMake(0, 0);
-    mSpriteStartIntro.position = CGPointMake(50, 350);
+    mSpriteStartIntro.position = CGPointMake(50, 320);
     [self addChild:mSpriteStartIntro z:kTagIntro tag:kTagIntro];
 }
 
@@ -135,6 +143,19 @@ enum{
     animate = [animate initWithAnimation:animation restoreOriginalFrame:NO];
 }
 
+-(void)createLabels
+{
+    mLabelScore = [CCLabelTTF labelWithString:@"Score : 0" fontName:@"Arial" fontSize:18];
+    mLabelScore.anchorPoint = CGPointMake(0, 0);
+    mLabelScore.position = CGPointMake(200, 450);
+    [self addChild:mLabelScore z:kTagLabel tag:kTagLabel];
+    
+    gLabelMosquitoCount = [CCLabelTTF labelWithString:@"Mosquito : 0" fontName:@"Arial" fontSize:18];
+    gLabelMosquitoCount.anchorPoint = CGPointMake(0, 0);
+    gLabelMosquitoCount.position = CGPointMake(200, 420);
+    [self addChild:gLabelMosquitoCount z:kTagLabel tag:kTagLabel];
+}
+
 -(void)completeAnimateA
 {
     [mSpriteNomalPlayer1 stopAllActions];
@@ -144,6 +165,18 @@ enum{
     [mSpriteNomalPlayer2 stopAllActions];
 }
 
+-(void)displayScore:(NSInteger)score
+{
+    NSString* str = [[NSString alloc]initWithFormat:@"Score : %d", score];
+    [mLabelScore setString:str];
+}
+
++(void)displayMosquito
+{
+    gMosquitoCount++;
+    NSString* str = [[NSString alloc]initWithFormat:@"Mosquito : %d", gMosquitoCount];
+    [gLabelMosquitoCount setString:str];
+}
 #pragma mark schedule
 //start intro 끝나고 나서 호출됨.
 -(void)IntroEnd
