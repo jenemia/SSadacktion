@@ -20,5 +20,8 @@
 @property (strong, nonatomic) CCAnimate* mAnimateAttackPlayer2;
 @property (strong, nonatomic) CCAnimate* mAnimateCatchPlayer2;
 
-@property (strong, nonatomic) 
+@property (strong, nonatomic) CCSprite* mSpriteMosquite;
+
+@property (nonatomic) NSInteger mTimeCount;
+@property (nonatomic) NSInteger mTimeTarget;
 @end

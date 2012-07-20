@@ -11,7 +11,8 @@
 enum{
     kTagBackground = 0,
     kTagNomalPlayer,
-    kTagAttackPlayer
+    kTagAttackPlayer,
+    kTagMosquite
 };
 
 @implementation GamePlayLayer
@@ -19,6 +20,8 @@ enum{
 @synthesize mSpriteBackground;
 @synthesize mSpriteNomalPlayer1, mAnimateAttackPlayer1, mAnimateCatchPlayer1;
 @synthesize mSpriteNomalPlayer2, mAnimateAttackPlayer2, mAnimateCatchPlayer2;
+@synthesize mSpriteMosquite;
+@synthesize mTimeCount, mTimeTarget;
 
 -(id)init
 {
@@ -47,6 +50,17 @@ enum{
         mAnimateCatchPlayer2 = [CCAnimate alloc];
         [self createAnimate:mAnimateCatchPlayer2 runImage:@"catch_right.png" 
                   lastImage:@"nomal_right.png"];
+        
+        
+        mSpriteMosquite = [[CCSprite alloc]initWithFile:@"mosquito.png"];
+        mSpriteMosquite.anchorPoint = CGPointMake(0, 0);
+        mSpriteMosquite.position = CGPointMake(10, 400);
+        [self addChild:mSpriteMosquite z:kTagMosquite tag:kTagMosquite];
+        
+        srand(time(NULL));
+        mTimeCount = 0;
+        mTimeTarget = 3;
+        [self schedule:@selector(ScheduleTimeCount) interval:1];
     }
     return self;
 }
@@ -98,6 +112,26 @@ enum{
 {
     [mSpriteNomalPlayer2 stopAllActions];
 }
+
+#pragma mark schedule
+-(void)ScheduleTimeCount
+{
+    mTimeCount++;
+    if( mTimeCount >= mTimeTarget )
+        [self ScheduleStop:@selector(ScheduleTimeCount)];
+}
+
+-(void)ScheduleStop:(SEL)selector
+{
+    [self unschedule:selector];
+    NSLog(@"schedule out");
+}
+
+-(void)moveMosquito
+{
+    
+}
+
 
 #pragma mark event
 -(void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
