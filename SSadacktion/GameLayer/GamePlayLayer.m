@@ -17,8 +17,8 @@ enum{
 @implementation GamePlayLayer
 
 @synthesize mSpriteBackground;
-@synthesize mSpriteNomalPlayer1, mAnimateAttackPlayer1;
-@synthesize mSpriteNomalPlayer2, mAnimateAttackPlayer2;
+@synthesize mSpriteNomalPlayer1, mAnimateAttackPlayer1, mAnimateCatchPlayer1;
+@synthesize mSpriteNomalPlayer2, mAnimateAttackPlayer2, mAnimateCatchPlayer2;
 
 -(id)init
 {
@@ -35,8 +35,17 @@ enum{
         mAnimateAttackPlayer1 = [CCAnimate alloc];
         [self createAnimate:mAnimateAttackPlayer1 runImage:@"attack_left.png" 
                   lastImage:@"nomal_left.png"];
+        
+        mAnimateCatchPlayer1 = [CCAnimate alloc];
+        [self createAnimate:mAnimateCatchPlayer1 runImage:@"catch_left.png" 
+                  lastImage:@"nomal_left.png"];
+        
         mAnimateAttackPlayer2 = [CCAnimate alloc];
         [self createAnimate:mAnimateAttackPlayer2 runImage:@"attack_right.png" 
+                  lastImage:@"nomal_right.png"];
+        
+        mAnimateCatchPlayer2 = [CCAnimate alloc];
+        [self createAnimate:mAnimateCatchPlayer2 runImage:@"catch_right.png" 
                   lastImage:@"nomal_right.png"];
     }
     return self;

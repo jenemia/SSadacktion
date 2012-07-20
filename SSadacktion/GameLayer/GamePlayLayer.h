@@ -14,7 +14,11 @@
 
 @property (strong, nonatomic) CCSprite* mSpriteNomalPlayer1;
 @property (strong, nonatomic) CCAnimate* mAnimateAttackPlayer1;
+@property (strong, nonatomic) CCAnimate* mAnimateCatchPlayer1;
 
 @property (strong, nonatomic) CCSprite* mSpriteNomalPlayer2;
 @property (strong, nonatomic) CCAnimate* mAnimateAttackPlayer2;
+@property (strong, nonatomic) CCAnimate* mAnimateCatchPlayer2;
+
+@property (strong, nonatomic) 
 @end
