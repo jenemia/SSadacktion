@@ -31,8 +31,7 @@
 
 @property (nonatomic) BOOL mGameStart;
 
-@property (nonatomic) NSInteger mScore;
-@property (strong, nonatomic) CCLabelTTF* mLabelScore;
-
++(void)displayScore;
 +(void)displayMosquito;
++(void)BoolTouch:(BOOL)result;
 @end

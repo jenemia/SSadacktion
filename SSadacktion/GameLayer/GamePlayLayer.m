@@ -21,6 +21,11 @@ enum{
 CCLabelTTF* gLabelMosquitoCount;
 NSInteger gMosquitoCount;
 
+NSInteger gScore;
+CCLabelTTF* gLabelScore;
+
+BOOL gBoolTouch = true;
+
 @implementation GamePlayLayer
 
 @synthesize mSpriteBackground, mSpriteStartIntro, mAnimateStartIntro;
@@ -29,7 +34,6 @@ NSInteger gMosquitoCount;
 @synthesize mSpriteMosquite;
 @synthesize mTimeCount, mTimeTarget;
 @synthesize mGameStart;
-@synthesize mScore,mLabelScore;
 
 -(id)init
 {
@@ -37,7 +41,7 @@ NSInteger gMosquitoCount;
     {
         self.isTouchEnabled = YES;
         mGameStart = false;
-        mScore = 0;
+        gScore = 0;
         gMosquitoCount = 0;
         
         [self createBackground];
@@ -145,10 +149,10 @@ NSInteger gMosquitoCount;
 
 -(void)createLabels
 {
-    mLabelScore = [CCLabelTTF labelWithString:@"Score : 0" fontName:@"Arial" fontSize:18];
-    mLabelScore.anchorPoint = CGPointMake(0, 0);
-    mLabelScore.position = CGPointMake(200, 450);
-    [self addChild:mLabelScore z:kTagLabel tag:kTagLabel];
+    gLabelScore = [CCLabelTTF labelWithString:@"Score : 0" fontName:@"Arial" fontSize:18];
+    gLabelScore.anchorPoint = CGPointMake(0, 0);
+    gLabelScore.position = CGPointMake(200, 450);
+    [self addChild:gLabelScore z:kTagLabel tag:kTagLabel];
     
     gLabelMosquitoCount = [CCLabelTTF labelWithString:@"Mosquito : 0" fontName:@"Arial" fontSize:18];
     gLabelMosquitoCount.anchorPoint = CGPointMake(0, 0);
@@ -165,17 +169,25 @@ NSInteger gMosquitoCount;
     [mSpriteNomalPlayer2 stopAllActions];
 }
 
--(void)displayScore:(NSInteger)score
+//점수 올라감
++(void)displayScore
 {
-    NSString* str = [[NSString alloc]initWithFormat:@"Score : %d", score];
-    [mLabelScore setString:str];
+    gScore++;
+    NSString* str = [[NSString alloc]initWithFormat:@"Score : %d", gScore];
+    [gLabelScore setString:str];
 }
 
+//모기 숫자 올라감
 +(void)displayMosquito
 {
     gMosquitoCount++;
     NSString* str = [[NSString alloc]initWithFormat:@"Mosquito : %d", gMosquitoCount];
     [gLabelMosquitoCount setString:str];
+}
+
++(void)BoolTouch:(BOOL)result
+{
+    gBoolTouch = result;
 }
 #pragma mark schedule
 //start intro 끝나고 나서 호출됨.
@@ -194,8 +206,14 @@ NSInteger gMosquitoCount;
 {
     if( mGameStart == true )
     {
-        [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateAttackPlayer1, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateA)],nil]];
-        [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateAttackPlayer2, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateB)],nil]];
+        if( gBoolTouch == true )
+        {
+            gBoolTouch = false;
+            [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateAttackPlayer1, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateA)],nil]];
+            [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateAttackPlayer2, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateB)],nil]];
+            
+            [mSpriteMosquite checkCollision]; //모기 충돌 체크
+        }
     }
 }
 

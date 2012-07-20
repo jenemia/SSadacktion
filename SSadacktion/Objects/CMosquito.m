@@ -12,6 +12,8 @@
 #define scheduleTimeCount 0.1
 #define spotX 130
 #define spotY 150
+#define imageWidth 50
+#define imageHeight 50
 
 @implementation CMosquito
 
@@ -25,6 +27,7 @@
         srand(time(NULL));
         mTimeCount = 0;
         mTimeTarget = 0;
+        mTimeStay = 1.5;
         mMoveVelocityX = 0;
         mMoveVelocityY = 0;
     }
@@ -36,7 +39,6 @@
 {
     mTimeTarget = rand()%3+2;
     mTimeCount = 0;
-    mTimeStay = 1.5;
     mMoveVelocityX = rand()%10;
     mMoveVelocityY = rand()%10;
     
@@ -48,7 +50,6 @@
 //스케쥴로써 모기는 움직인다.
 -(void)move
 {
-    NSLog(@"move");
     mTimeCount++;
     
     if( (mTimeCount*scheduleTimeCount) >= mTimeTarget ) //제한시간 끝났을 때
@@ -61,7 +62,6 @@
     
     if( (mTimeCount % 10) == 0 )
     {
-        NSLog(@"change");
         mMoveVelocityX = rand()%20;
         mMoveVelocityY = rand()%20;
     }
@@ -104,6 +104,7 @@
     }
 }
 
+//플레이어 사이에 멈추는 것
 -(void)moveStay
 {
     mTimeCount++;
@@ -118,6 +119,7 @@
     }
 }
 
+//Stay 시간 이후 화면밖으로 나가서 새로운 모기가 생성되도록.
 -(void)moveAvoid
 {
     mTimeCount++;
@@ -128,12 +130,47 @@
     
     if( mTimeCount == 5 ) // 화면 밖으로 갔다면 스케쥴로 끝.
     {
-        [self unschedule:@selector(moveAvoid)];
+        [self unschedule:@selector(moveAvoid)]; 
         mTimeCount = 0;
-        [GamePlayLayer displayMosquito];
+        [GamePlayLayer displayMosquito]; //게임화면 모기 카운트 늘리고
         self.position = CGPointMake(10, 300);
-        [self moveStart];
+        [self moveStart]; //새로운 모기 시작.
+        [GamePlayLayer BoolTouch:true];
     }
+}
+
+-(BOOL)checkCollision
+{
+    CGPoint position = [self position];
+    
+    if( (position.x >= spotX && position.x <= spotX+imageWidth) || 
+       (position.x+imageWidth >= spotX && position.x+imageWidth <= spotX+imageWidth) )
+       {
+           if( (position.y >= spotY-imageHeight && position.y <= spotY) ||
+              (position.y-imageHeight >= spotY-imageHeight && position.y-imageHeight <= spotY) )
+           {
+               //충돌
+               NSLog(@"충돌");
+               [self unscheduleAllSelectors]; //모든 스케쥴러 정지
+               mTimeCount = 0;
+               mTimeStay -= 0.2; //머무는 시간 줄여서 난이도 높이기
+               if( mTimeStay < 0.5 )
+                   mTimeStay = 0.5;
+               
+               NSLog(@"머무는 시간 : %d", mTimeStay);
+               
+               [GamePlayLayer displayScore]; //점수 올리기
+               
+               [GamePlayLayer displayMosquito]; //게임화면 모기 카운트 늘리고
+               self.position = CGPointMake(10, 300);
+               [self moveStart]; //새로운 모기 시작.
+               [GamePlayLayer BoolTouch:true];
+               return TRUE;
+           }
+              
+       }
+    
+    return FALSE;
 }
 
 @end

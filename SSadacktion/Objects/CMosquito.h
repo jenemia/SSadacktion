@@ -18,4 +18,5 @@
 @property (nonatomic) NSInteger mMoveVelocityY;
 
 -(void)moveStart;
+-(BOOL)checkCollision;
 @end
