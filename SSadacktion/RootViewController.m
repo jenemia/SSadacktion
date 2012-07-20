@@ -17,32 +17,70 @@
 #import "GameConfig.h"
 
 @implementation RootViewController
+@synthesize myMatch;
 
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
- - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-	// Custom initialization
-	}
-	return self;
- }
- */
+-(void)startGameCenter{
+    NSLog(@"Gogo!");
+    m_setCallbackClass = nil;
+    NSLog(@"Gogo!2");
+    if([self isGameCenterAvailable]){
+        NSLog(@"Gogo! 3");
+        [self authenticateLocalPlayer];
+        NSLog(@"Gogo! 4");
+    }
+}
+- (BOOL) isGameCenterAvailable
+{
+    // Check for presence of GKLocalPlayer API.
+    Class gcClass = (NSClassFromString(@"GKLocalPlayer"));
+    
+    // The device must be running running iOS 4.1 or later.
+    NSString *reqSysVer = @"4.1";
+    NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
+    BOOL osVersionSupported = ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending);
+    
+    return (gcClass && osVersionSupported);
+}
 
-/*
- // Implement loadView to create a view hierarchy programmatically, without using a nib.
- - (void)loadView {
- }
- */
 
-/*
- // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
- - (void)viewDidLoad {
-	[super viewDidLoad];
- }
- */
-
-
-// Override to allow orientations other than the default portrait orientation.
+- (void) authenticateLocalPlayer // GameCenter의 User 인증 시 필요한 부분입니다.
+{
+    [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error) {
+        if (error == nil) //인증 성공 시 ...
+        {
+            // Insert code here to handle a successful authentication.
+            NSLog(@"1--alias--.%@",[GKLocalPlayer localPlayer].alias);
+            NSLog(@"2--authenticated--.%d",[GKLocalPlayer localPlayer].authenticated);
+            NSLog(@"3--isFriend--.%d",[GKLocalPlayer localPlayer].isFriend);
+            NSLog(@"4--playerID--.%@",[GKLocalPlayer localPlayer].playerID);
+            NSLog(@"5--underage--.%d",[GKLocalPlayer localPlayer].underage);
+            
+            NSLog(@"Game Center: Player Authenticated!");
+            
+            [GKMatchmaker sharedMatchmaker].inviteHandler = ^(GKInvite *acceptedInvite, NSArray *playersToInvite){
+                if(acceptedInvite){
+                    m_recieveDataCallback = nil; 
+                    GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithInvite:acceptedInvite]autorelease];
+                    mmvc.matchmakerDelegate = self;
+                    [self presentModalViewController: mmvc animated:YES];
+                    
+                }else if(playersToInvite){
+                    GKMatchRequest *request = [[[GKMatchRequest alloc] init] autorelease];
+                    request.minPlayers = 2;
+                    request.maxPlayers = 2;
+                    request.playersToInvite = playersToInvite;
+                    GKMatchmakerViewController *mmvc = [[[GKMatchmakerViewController alloc] initWithMatchRequest:request] autorelease];
+                    mmvc.matchmakerDelegate = self;
+                }
+            };
+        }
+        else
+        {
+            NSLog(@"AuthenticateLocalPlayer Error");
+            // Your application can process the error parameter to report the error to the player.
+        }
+    }];
+}
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	
 	//
@@ -150,4 +188,3 @@
 
 
 @end
-
