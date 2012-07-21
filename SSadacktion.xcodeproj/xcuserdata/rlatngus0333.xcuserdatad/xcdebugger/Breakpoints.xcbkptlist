@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "364520557.181359"
+         timestampString = "364544856.8231"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "46"
-         endingLineNumber = "46"
+         startingLineNumber = "56"
+         endingLineNumber = "56"
          landmarkName = "-init"
          landmarkType = "5">
       </FileBreakpoint>
@@ -47,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "364520557.181359"
+         timestampString = "364544856.8231"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "117"
-         endingLineNumber = "117"
+         startingLineNumber = "160"
+         endingLineNumber = "160"
          landmarkName = "-createPlayer"
          landmarkType = "5">
       </FileBreakpoint>
@@ -60,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "364520557.181359"
+         timestampString = "364544856.8231"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "116"
-         endingLineNumber = "116"
+         startingLineNumber = "159"
+         endingLineNumber = "159"
          landmarkName = "-createPlayer"
          landmarkType = "5">
       </FileBreakpoint>
@@ -73,11 +73,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "364520557.181359"
+         timestampString = "364544856.8231"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "54"
-         endingLineNumber = "54"
+         startingLineNumber = "64"
+         endingLineNumber = "64"
          landmarkName = "-init"
          landmarkType = "5">
       </FileBreakpoint>
@@ -86,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "364524893.347404"
+         timestampString = "364545259.614177"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "225"
-         endingLineNumber = "225"
+         startingLineNumber = "363"
+         endingLineNumber = "363"
          landmarkName = "-ccTouchesBegan:withEvent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -99,11 +99,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "364524893.347404"
+         timestampString = "364545161.556303"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "202"
-         endingLineNumber = "202"
+         startingLineNumber = "288"
+         endingLineNumber = "288"
          landmarkName = "-IntroEnd"
          landmarkType = "5">
       </FileBreakpoint>
@@ -112,11 +112,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/Objects/CMosquito.m"
-         timestampString = "364531836.619667"
+         timestampString = "364542779.953943"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "46"
-         endingLineNumber = "46"
+         startingLineNumber = "58"
+         endingLineNumber = "58"
          landmarkName = "-moveStart"
          landmarkType = "5">
       </FileBreakpoint>
@@ -138,11 +138,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "364524893.347404"
+         timestampString = "364545161.556303"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "203"
-         endingLineNumber = "203"
+         startingLineNumber = "292"
+         endingLineNumber = "292"
          landmarkName = "-IntroEnd"
          landmarkType = "5">
       </FileBreakpoint>
@@ -151,11 +151,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/Objects/CMosquito.m"
-         timestampString = "364531836.619667"
+         timestampString = "364542779.953943"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "57"
-         endingLineNumber = "57"
+         startingLineNumber = "69"
+         endingLineNumber = "69"
          landmarkName = "-move"
          landmarkType = "5">
       </FileBreakpoint>
@@ -164,12 +164,129 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/Objects/CMosquito.m"
-         timestampString = "364531836.619667"
+         timestampString = "364547533.900183"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "81"
-         endingLineNumber = "81"
+         startingLineNumber = "97"
+         endingLineNumber = "97"
          landmarkName = "-moveToSpot"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/Objects/SoundManager.m"
+         timestampString = "364547128.264271"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "55"
+         endingLineNumber = "55"
+         landmarkName = "-playSystemSound:fileType:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/Objects/SoundManager.m"
+         timestampString = "364532132.901991"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "50"
+         endingLineNumber = "50"
+         landmarkName = "-playSystemSound:fileType:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/Objects/CMosquito.m"
+         timestampString = "364542779.953943"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "63"
+         endingLineNumber = "63"
+         landmarkName = "-moveStart"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/Objects/CMosquito.m"
+         timestampString = "364547466.910685"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "191"
+         endingLineNumber = "191"
+         landmarkName = "-checkCollision"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/Objects/SoundManager.m"
+         timestampString = "364547128.264271"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "78"
+         endingLineNumber = "78"
+         landmarkName = "-dealloc"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
+         timestampString = "364545259.614177"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "339"
+         endingLineNumber = "339"
+         landmarkName = "-ccTouchesBegan:withEvent:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
+         timestampString = "364545161.556303"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "255"
+         endingLineNumber = "255"
+         landmarkName = "-completeAnimate"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
+         timestampString = "364545179.759231"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "244"
+         endingLineNumber = "244"
+         landmarkName = "-displayHp"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/Objects/CMosquito.m"
+         timestampString = "364546204.171858"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "131"
+         endingLineNumber = "131"
+         landmarkName = "-moveStay"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

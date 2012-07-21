@@ -48,7 +48,6 @@ static SoundManager* _sharedSoundManager = nil;
 {
     @try {
         NSNumber* num = (NSNumber*)[mSoundIDDic objectForKey:fileName];
-        NSLog(@"%d", mSoundIDDic.count);
         SystemSoundID soundID;
         
         if( num == nil )

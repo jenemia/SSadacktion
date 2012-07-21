@@ -10,7 +10,7 @@
 #import "GamePlayLayer.h"
 #import "SoundManager.h"
 
-#define scheduleTimeCount 0.1
+#define scheduleTimeCount 0.05
 #define spotX 130
 #define spotY 150
 #define imageWidth 50
@@ -28,8 +28,8 @@
     {
         srand(time(NULL));
         mTimeCount = 0;
-        mTimeTarget = 0;
-        mTimeStay = 1.5;
+        mTimeTarget = 1.5;
+        mTimeStay = 0.25;
         mMoveVelocityX = 0;
         mMoveVelocityY = 0;
         mSoundManager = [SoundManager sharedSoundManager];
@@ -37,10 +37,22 @@
     return self;
 }
 
+-(void)initNotAlloc
+{
+    mTimeCount = 0;
+    mTimeTarget = 1.5;
+    mTimeStay = 0.25;
+    mMoveVelocityX = 0;
+    mMoveVelocityY = 0;
+    [self unscheduleAllSelectors];
+}
+
 //모기 움직이기 시작
+//IntroEnd, Touch 두 곳
 -(void)moveStart
 {
-    mTimeTarget = rand()%3+2;
+    [GamePlayLayer BoolTouch:true];
+    [GamePlayLayer displayMosquito]; //게임화면 모기 카운트 늘리고
     mTimeCount = 0;
     mMoveVelocityX = rand()%10;
     mMoveVelocityY = rand()%10;
@@ -55,19 +67,23 @@
 -(void)move
 {
     mTimeCount++;
-    
     if( (mTimeCount*scheduleTimeCount) >= mTimeTarget ) //제한시간 끝났을 때
     {
         [self unschedule:@selector(move)];
-        NSLog(@"제한시간 끝");
+        NSLog(@"이동 끝");
         [self moveToSpot]; //플레이어가 잡을 수 있는 지점으로 날라가기 시작
         return;
     }
     
-    if( (mTimeCount % 10) == 0 )
+    NSInteger tmp = rand()%2;
+    NSInteger minus = 1;
+    if( tmp == 0 )
+        minus *= -1;
+    
+    if( (mTimeCount % 5) == 0 )
     {
-        mMoveVelocityX = rand()%20;
-        mMoveVelocityY = rand()%20;
+        mMoveVelocityX = rand()%50+20 * minus;
+        mMoveVelocityY = rand()%50+20 * minus;
     }
     
     CGPoint _prePos = [self position];
@@ -86,7 +102,7 @@
     
     mTimeCount = 0;
     
-    [self schedule:@selector(movePosition) interval:0.1];
+    [self schedule:@selector(movePosition) interval:scheduleTimeCount];
 }
 
 //스케쥴로 애니메이션 효과와 같이 이동한다.
@@ -110,15 +126,15 @@
 -(void)moveStay
 {
     mTimeCount++;
+    NSLog(@"%d",mTimeCount);
     
     if( (mTimeCount*scheduleTimeCount) >= mTimeStay ) //제한시간 끝났을 때
     {
-        [self unschedule:@selector(moveStay)];
-        NSLog(@"Stay 제한시간 끝");
-        mTimeCount = 0;
+       [self unschedule:@selector(moveStay)];
+        NSLog(@"Stay 제한시간 끝 :%f ", mTimeStay);
+        mTimeCount = 0;        
         [self schedule:@selector(moveAvoid) interval:scheduleTimeCount];
-        
-        [mSoundManager playSystemSound:@"mosquito" fileType:@"wav"];
+
         return;
     }
 }
@@ -135,39 +151,31 @@
     if( mTimeCount == 5 ) // 화면 밖으로 갔다면 스케쥴로 끝.
     {
         [self unschedule:@selector(moveAvoid)]; 
-        [self resetMosquito];
+        
+        mTimeCount = 0;
+        self.position = CGPointMake(10, 300);
+        [self moveStart]; //새로운 모기 시작.
     }
-}
-
--(void)resetMosquito
-{
-    mTimeCount = 0;
-    self.position = CGPointMake(10, 300);
-    [self moveStart]; //새로운 모기 시작.
-    [GamePlayLayer BoolTouch:true];
-    [GamePlayLayer displayMosquito]; //게임화면 모기 카운트 늘리고
 }
 
 -(void)LevelUp
 {
-    [mSoundManager playSystemSound:@"hit" fileType:@"aif"];
     //충돌
     NSLog(@"충돌");
     [self unscheduleAllSelectors]; //모든 스케쥴러 정지
-    mTimeStay -= 0.2; //머무는 시간 줄여서 난이도 높이기
-    if( mTimeStay < 0.5 )
-        mTimeStay = 0.5;
     
+    NSLog(@"Timetarget : %f", mTimeTarget);
+    mTimeTarget -= 0.2;
+    if( mTimeTarget <= 0.5 )
+        mTimeTarget = 0.5;
     
     [GamePlayLayer displayScore]; //점수 올리기
     
-    [self resetMosquito];
+    mTimeCount = 0;
 }
 
 -(BOOL)checkCollision
 {
-    NSLog(@"머물었던 시간 : %f", mTimeStay);
-    
     CGPoint position = [self position];
     
     if( (position.x >= spotX && position.x <= spotX+imageWidth) || 
@@ -176,11 +184,12 @@
            if( (position.y >= spotY-imageHeight && position.y <= spotY) ||
               (position.y-imageHeight >= spotY-imageHeight && position.y-imageHeight <= spotY) )
            {
+               [mSoundManager playSystemSound:@"hit" fileType:@"aif"];
                return TRUE;
            }
        }
    [mSoundManager playSystemSound:@"ssadacktion" fileType:@"aif"];
-    mTimeStay += 0.2; //실패 했을 때 모기 체공시간을 늘린다.
+    mTimeTarget += 0.2; //실패 했을 때 모기 체공시간을 늘린다.
     return FALSE;
 }
 

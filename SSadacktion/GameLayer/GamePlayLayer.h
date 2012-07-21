@@ -10,7 +10,7 @@
 
 @class CMosquito;
 
-@interface GamePlayLayer : CCLayer
+@interface GamePlayLayer : CCLayer <UIAlertViewDelegate>
 
 @property (strong, nonatomic) CCSprite* mSpriteBackground;
 @property (strong, nonatomic) CCSprite* mSpriteStartIntro;
@@ -26,10 +26,24 @@
 
 @property (strong, nonatomic) CMosquito* mSpriteMosquite;
 
+@property (strong, nonatomic) CCLabelTTF* mLabelGameTime;
+@property (strong, nonatomic) CCLabelTTF* mLabelHp;
+@property (nonatomic) NSInteger mGameTime;
 @property (nonatomic) NSInteger mTimeCount;
 @property (nonatomic) NSInteger mTimeTarget;
+@property (nonatomic) NSInteger mHp;
 
 @property (nonatomic) BOOL mGameStart;
+
+@property (strong, nonatomic) CCSprite* mSpriteAttack;
+@property (strong, nonatomic) CCAnimate* mAnimateAttack;
+@property (strong, nonatomic) CCSprite* mSpriteCatch;
+@property (strong, nonatomic) CCAnimate* mAnimateCatch;
+
+@property (strong, nonatomic) CCSprite* mSpriteGameWin;
+@property (strong, nonatomic) CCSprite* mSpriteGameLose;
+
+@property (strong, nonatomic) UIAlertView* mAlertView;
 
 +(void)displayScore;
 +(void)displayMosquito;

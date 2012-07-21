@@ -21,6 +21,7 @@
 
 @property (strong,nonatomic) SoundManager* mSoundManager; 
 
+-(void)initNotAlloc;
 -(void)moveStart;
 -(BOOL)checkCollision;
 -(void)LevelUp;
