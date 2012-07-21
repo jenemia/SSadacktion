@@ -3,15 +3,26 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[SoundManager playSystemSound:fileType:]:SoundManager.m">
-      </ContextState>
-      <ContextState
          contextName = "-[CMosquito moveStay]:CMosquito.m">
          <PersistentStrings>
             <PersistentString
                value = "mTimeCount*scheduleTimeCount">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[Client mHost]:Client.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "hHost">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[SoundManager playSystemSound:fileType:]:SoundManager.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[GameMainLayer GamemenuStart]:GameMainLayer.m">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

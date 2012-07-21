@@ -46,7 +46,7 @@ enum{
         } 
         else ///guest
         {
-            [self wait];
+            [self schedule:@selector(wait)];
         }
         
     }
@@ -63,11 +63,10 @@ enum{
 
 -(void)GamemenuStart
 {
-    if( [mClient.mHost isEqualToString:@"1"] )
-    {
         mClient.mState = @"1";
         [mClient send];
-    }
+        while( !mClient.mGameStart );
+    
     [[CCDirector sharedDirector]pushScene:[GamePlayScene node]];
 }
 @end

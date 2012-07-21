@@ -131,6 +131,7 @@ static Client* _sharedClient = nil;
     int len;
     
     len = read(mSocket, text, 1024);
+    NSLog(@"receive");
     NSString* _result = [[NSString alloc]initWithFormat:@"%s",text];
     
     //state, room, player, x, y, host, GameStart
@@ -140,7 +141,7 @@ static Client* _sharedClient = nil;
     {
         NSLog(@"%@", str);
     }
-    
+    mState = (NSString*)[arr objectAtIndex:0];
     mRoom = (NSString*)[arr objectAtIndex:1];
     mPlayer = (NSString*)[arr objectAtIndex:2];
     mX = (NSString*)[arr objectAtIndex:3];
