@@ -8,6 +8,7 @@
 
 #import "CMosquito.h"
 #import "GamePlayLayer.h"
+#import "SoundManager.h"
 
 #define scheduleTimeCount 0.1
 #define spotX 130
@@ -45,6 +46,7 @@
     [self unscheduleAllSelectors];
     
     [self schedule:@selector(move) interval:scheduleTimeCount];
+//    [[SoundManager sharedSoundManager]playSystemSound:@"mosquito" fileType:@"wav"];
 }
 
 //스케쥴로써 모기는 움직인다.
@@ -115,6 +117,8 @@
         NSLog(@"Stay 제한시간 끝");
         mTimeCount = 0;
         [self schedule:@selector(moveAvoid) interval:scheduleTimeCount];
+        
+//        [[SoundManager sharedSoundManager]playSystemSound:@"mosquito" fileType:@"wav"];
         return;
     }
 }
@@ -131,16 +135,23 @@
     if( mTimeCount == 5 ) // 화면 밖으로 갔다면 스케쥴로 끝.
     {
         [self unschedule:@selector(moveAvoid)]; 
-        mTimeCount = 0;
-        [GamePlayLayer displayMosquito]; //게임화면 모기 카운트 늘리고
-        self.position = CGPointMake(10, 300);
-        [self moveStart]; //새로운 모기 시작.
-        [GamePlayLayer BoolTouch:true];
+        [self resetMosquito];
     }
+}
+
+-(void)resetMosquito
+{
+    mTimeCount = 0;
+    self.position = CGPointMake(10, 300);
+    [self moveStart]; //새로운 모기 시작.
+    [GamePlayLayer BoolTouch:true];
+    [GamePlayLayer displayMosquito]; //게임화면 모기 카운트 늘리고
 }
 
 -(BOOL)checkCollision
 {
+    NSLog(@"머물었던 시간 : %f", mTimeStay);
+    
     CGPoint position = [self position];
     
     if( (position.x >= spotX && position.x <= spotX+imageWidth) || 
@@ -149,27 +160,23 @@
            if( (position.y >= spotY-imageHeight && position.y <= spotY) ||
               (position.y-imageHeight >= spotY-imageHeight && position.y-imageHeight <= spotY) )
            {
+//               [[SoundManager sharedSoundManager]playSystemSound:@"ssadacktion" fileType:@"aif"];
                //충돌
                NSLog(@"충돌");
                [self unscheduleAllSelectors]; //모든 스케쥴러 정지
-               mTimeCount = 0;
                mTimeStay -= 0.2; //머무는 시간 줄여서 난이도 높이기
                if( mTimeStay < 0.5 )
                    mTimeStay = 0.5;
                
-               NSLog(@"머무는 시간 : %d", mTimeStay);
                
                [GamePlayLayer displayScore]; //점수 올리기
                
-               [GamePlayLayer displayMosquito]; //게임화면 모기 카운트 늘리고
-               self.position = CGPointMake(10, 300);
-               [self moveStart]; //새로운 모기 시작.
-               [GamePlayLayer BoolTouch:true];
+               [self resetMosquito];
                return TRUE;
            }
               
        }
-    
+//   [[SoundManager sharedSoundManager]playSystemSound:@"hit" fileType:@"aif"];
     return FALSE;
 }
 

@@ -11,8 +11,8 @@
 @interface CMosquito : CCSprite
 
 @property (nonatomic) NSInteger mTimeCount;
-@property (nonatomic) NSInteger mTimeTarget;
-@property (nonatomic) NSInteger mTimeStay;
+@property (nonatomic) CGFloat mTimeTarget;
+@property (nonatomic) CGFloat mTimeStay;
 
 @property (nonatomic) NSInteger mMoveVelocityX;
 @property (nonatomic) NSInteger mMoveVelocityY;

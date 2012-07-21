@@ -42,7 +42,7 @@ BOOL gBoolTouch = true;
         self.isTouchEnabled = YES;
         mGameStart = false;
         gScore = 0;
-        gMosquitoCount = 0;
+        gMosquitoCount = 1;
         
         [self createBackground];
         [self createPlayer];
