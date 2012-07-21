@@ -48,15 +48,20 @@ static Client* _sharedClient = nil;
     mSocket = socket(PF_INET, SOCK_STREAM, 0);
     if( mSocket == -1 )
         return nil;
+    mState = [[NSString alloc]initWithString:@"0"];
+    mRoom = [[NSString alloc]initWithString:@"0"];
+    mPlayer =  [[NSString alloc]initWithString:@"0"];
+    mX = [[NSString alloc]initWithString:@"0"];
+    mY =  [[NSString alloc]initWithString:@"0"];
+    mHost =  [[NSString alloc]initWithString:@"0"];
+    mGameStart = [[NSString alloc]initWithString:@"0"];
     
-    mRoom =0, mPlayer=0, mX=0, mY=0;
-    mHost = 0, mGameStart=0;
     
     [self connect:@"192.168.0.11" port:5555]; //서버 연결
     [self send]; // 처음 계정 설정
+    [self receive];
     
     mThread = [[NSThread alloc]initWithTarget:self selector:@selector(StartReceive) object:nil];
-    [mThread start];
     return self;
 }
 
@@ -64,6 +69,11 @@ static Client* _sharedClient = nil;
 {
     [super dealloc];
     [mThread cancel];
+}
+
+-(void)StartThread
+{
+    [mThread start];
 }
 
 -(void)StartReceive
@@ -99,7 +109,7 @@ static Client* _sharedClient = nil;
 -(int)send
 {
     //state, room, player, x, y, host, GameStart
-    NSString* str = [[NSString alloc]initWithFormat:@"state,%d,room,%d,player,%d,x,%d,y,%d,host,%d,gamestart,%d,,", mState,mRoom,mPlayer,mX,mY,mHost,mGameStart];
+    NSString* str = [[NSString alloc]initWithFormat:@"state,%@,room,%@,player,%@,x,%@,y,%@,host,%@,gamestart,%@,,", mState,mRoom,mPlayer,mX,mY,mHost,mGameStart];
     const char* message = [str UTF8String];
     
     int sent=0, ret=0;
@@ -125,12 +135,18 @@ static Client* _sharedClient = nil;
     
     //state, room, player, x, y, host, GameStart
     NSArray* arr = [_result componentsSeparatedByString:@","];
-    mRoom = (NSInteger)[arr objectAtIndex:3];
-    mPlayer = (NSInteger)[arr objectAtIndex:5];
-    mX = (NSInteger)[arr objectAtIndex:7];
-    mY = (NSInteger)[arr objectAtIndex:9];
-    mHost = (NSInteger)[arr objectAtIndex:11];
-    mGameStart = (NSInteger)[arr objectAtIndex:13];
+    
+    for( NSString* str in arr )
+    {
+        NSLog(@"%@", str);
+    }
+    
+    mRoom = (NSString*)[arr objectAtIndex:1];
+    mPlayer = (NSString*)[arr objectAtIndex:2];
+    mX = (NSString*)[arr objectAtIndex:3];
+    mY = (NSString*)[arr objectAtIndex:4];
+    mHost = (NSString*)[arr objectAtIndex:5];
+    mGameStart = (NSString*)[arr objectAtIndex:6];
     
   	return len;
 }

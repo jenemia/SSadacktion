@@ -12,17 +12,18 @@
 
 @property (nonatomic) NSInteger mSocket;
 
-@property (nonatomic) NSInteger mState;
-@property (nonatomic) NSInteger mRoom;
-@property (nonatomic) NSInteger mPlayer;
-@property (nonatomic) NSInteger mX;
-@property (nonatomic) NSInteger mY;
-@property (nonatomic) NSInteger mHost;
-@property (nonatomic) NSInteger mGameStart;
+@property (strong, nonatomic) NSString* mState;
+@property (strong, nonatomic) NSString* mRoom;
+@property (strong, nonatomic) NSString* mPlayer;
+@property (strong, nonatomic) NSString* mX;
+@property (strong, nonatomic) NSString* mY;
+@property (strong, nonatomic) NSString* mHost;
+@property (strong, nonatomic) NSString* mGameStart;
 
 @property (strong, nonatomic) NSThread* mThread;
 
 +(Client*)sharedClient;
+-(void)StartThread;
 -(id)init;
 -(int)connect:(NSString*)host port:(unsigned short)port;
 -(int)send;
