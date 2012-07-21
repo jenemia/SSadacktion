@@ -10,12 +10,15 @@
 #import "GameMainScene.h"
 #import "CMosquito.h"
 
+#define ImageWidth 230
+#define ImageHeight 306
+
 enum{
     kTagBackground = 0,
     kTagNomalPlayer,
     kTagAttackPlayer,
-    kTagIntro,
     kTagLabel,
+    kTagIntro,
     kTagMosquite,
     kTagResult
 };
@@ -39,7 +42,7 @@ BOOL gBoolTouch = true;
 @synthesize mTimeCount, mTimeTarget, mHp;
 @synthesize mGameStart;
 @synthesize mLabelGameTime, mGameTime, mLabelHp;
-@synthesize mSpriteCatch, mAnimateCatch, mSpriteAttack, mAnimateAttack;
+@synthesize mSpriteCatch, mSpriteAttack;
 @synthesize mSpriteGameWin, mSpriteGameLose;
 @synthesize mAlertView;
 
@@ -58,7 +61,7 @@ BOOL gBoolTouch = true;
         [self createPlayer];
         
         mAnimateAttackPlayer1 = [CCAnimate alloc];
-        [self createAnimate:mAnimateAttackPlayer1 runImage:@"attack_left.png" 
+        [self createAnimate:mAnimateAttackPlayer1 runImage:@"catch_left.png" 
                   lastImage:@"nomal_left.png" delay:0.02f];
         
         mAnimateCatchPlayer1 = [CCAnimate alloc];
@@ -66,18 +69,12 @@ BOOL gBoolTouch = true;
                   lastImage:@"nomal_left.png" delay:0.02f];
         
         mAnimateAttackPlayer2 = [CCAnimate alloc];
-        [self createAnimate:mAnimateAttackPlayer2 runImage:@"attack_right.png" 
+        [self createAnimate:mAnimateAttackPlayer2 runImage:@"catch_right.png" 
                   lastImage:@"nomal_right.png" delay:0.02f];
         
         mAnimateCatchPlayer2 = [CCAnimate alloc];
         [self createAnimate:mAnimateCatchPlayer2 runImage:@"catch_right.png" 
                   lastImage:@"nomal_right.png" delay:0.02f];
-        
-        mAnimateCatch = [CCAnimate alloc];
-        [self createAnimate:mAnimateCatch runImage:@"catch.png" lastImage:@"catch.png" delay:0.04f];
-        
-        mAnimateAttack = [CCAnimate alloc];
-        [self createAnimate:mAnimateAttack runImage:@"attack.png" lastImage:@"attack.png" delay:0.04f];
         
         [self createLabels];
         
@@ -129,18 +126,6 @@ BOOL gBoolTouch = true;
     mSpriteStartIntro.position = CGPointMake(50, 320);
     [self addChild:mSpriteStartIntro z:kTagIntro tag:kTagIntro];
     
-    mSpriteGameWin = [[CCSprite alloc]initWithFile:@"win.png"];
-    mSpriteGameWin.anchorPoint = CGPointMake(0, 0);
-    mSpriteGameWin.position = CGPointMake(50, 320);
-    mSpriteGameWin.visible = false;
-    [self addChild:mSpriteGameWin z:kTagIntro tag:kTagIntro];
-    
-    mSpriteGameLose = [[CCSprite alloc]initWithFile:@"lose.png"];
-    mSpriteGameLose.anchorPoint = CGPointMake(0, 0);
-    mSpriteGameLose.position = CGPointMake(50, 320);
-    mSpriteGameLose.visible = false;
-    [self addChild:mSpriteGameLose z:kTagIntro tag:kTagIntro];
-    
     mSpriteAttack = [[CCSprite alloc]initWithFile:@"attack.png"];
     mSpriteAttack.anchorPoint = CGPointMake(0, 0);
     mSpriteAttack.position = CGPointMake(50, 100);
@@ -158,12 +143,12 @@ BOOL gBoolTouch = true;
 {
     mSpriteNomalPlayer1 = [[CCSprite alloc]initWithFile:@"nomal_left.png"];
     mSpriteNomalPlayer1.anchorPoint = CGPointMake(0, 0);
-    mSpriteNomalPlayer1.position = CGPointMake(20, 10);
+    mSpriteNomalPlayer1.position = CGPointMake(-20, 10);
     [self addChild:mSpriteNomalPlayer1 z:kTagNomalPlayer tag:kTagNomalPlayer];
     
     mSpriteNomalPlayer2 = [[CCSprite alloc]initWithFile:@"nomal_right.png"];
     mSpriteNomalPlayer2.anchorPoint = CGPointMake(0, 0);
-    mSpriteNomalPlayer2.position = CGPointMake(150, 10);
+    mSpriteNomalPlayer2.position = CGPointMake(120, 10);
     [self addChild:mSpriteNomalPlayer2 z:kTagNomalPlayer tag:kTagNomalPlayer];
 }
 
@@ -176,14 +161,13 @@ BOOL gBoolTouch = true;
 
     for( NSInteger idx=1; idx<10; idx++ )
     {
-        CCSpriteFrame* frame = [CCSpriteFrame frameWithTexture:sprite.texture rect:CGRectMake(0, 0, 150, 250)];
+        CCSpriteFrame* frame = [CCSpriteFrame frameWithTexture:sprite.texture rect:CGRectMake(0, 0, ImageWidth, ImageHeight)];
         [aniFrame addObject:frame];
     }
     
-    //왼쪽이면 flipX는 FALSE, 오른쪽이면 YES
     sprite = [[CCSprite alloc]initWithFile:lastImage];
     
-    CCSpriteFrame* frame = [CCSpriteFrame frameWithTexture:sprite.texture rect:CGRectMake(0, 0, 150, 250)];
+    CCSpriteFrame* frame = [CCSpriteFrame frameWithTexture:sprite.texture rect:CGRectMake(0, 0, ImageWidth, ImageHeight)];
     [aniFrame addObject:frame];
     
 CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
@@ -252,12 +236,14 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
 
 -(void)completeAnimate
 {
+    NSLog(@"compelete");
     [mSpriteNomalPlayer1 stopAllActions];
     [mSpriteNomalPlayer2 stopAllActions];
     [mSpriteCatch stopAllActions];
     [mSpriteAttack stopAllActions];
     mSpriteCatch.visible = false;
     mSpriteAttack.visible = false;
+
 }
 
 #pragma mark schedule
@@ -270,13 +256,16 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     gMosquitoCount = 0;
     mGameTime = 0;
     mHp = 5;
-    NSLog(@"Game StarT!!");
+    NSLog(@"Game Start!!");
     
     mSpriteMosquite.visible = true;
     gLabelScore.visible = true;
     gLabelMosquitoCount.visible = true;
     mLabelGameTime.visible = true;
     mLabelHp.visible = true;
+    
+    NSString* str = [[NSString alloc]initWithFormat:@"Score : %d", gScore];
+    [gLabelScore setString:str];
     
     mSpriteGameWin = false;
     mSpriteGameLose = false;
@@ -299,12 +288,28 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
 
 -(void)GameEnd
 {
+    NSLog(@"GameEnd");
     gBoolTouch = false;
+    mSpriteAttack.visible = false;
+    mSpriteCatch.visible = false;
     
     if( gScore >= 4 )
-        mSpriteGameWin.visible = true;
+    {
+        NSLog(@"win");
+        mSpriteGameWin = [[CCSprite alloc]initWithFile:@"win.png"];
+        mSpriteGameWin.anchorPoint = CGPointMake(0, 0);
+        mSpriteGameWin.position = CGPointMake(50, 320);
+        [self addChild:mSpriteGameWin z:kTagIntro tag:kTagIntro];
+    }
     else
-        mSpriteGameLose.visible = true;
+    {
+        NSLog(@"lose");
+        mSpriteGameLose = [[CCSprite alloc]initWithFile:@"lose.png"];
+        mSpriteGameLose.anchorPoint = CGPointMake(0, 0);
+        mSpriteGameLose.position = CGPointMake(50, 320);
+        [self addChild:mSpriteGameLose z:kTagIntro tag:kTagIntro];
+    }
+
     [mSpriteMosquite initNotAlloc];
     mSpriteMosquite.visible = false;
     [self unscheduleAllSelectors];
@@ -317,6 +322,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     gLabelMosquitoCount.visible = false;
     mLabelHp.visible = false;
     
+    sleep(1);
     [mAlertView show]; //게임 재시작 또는 취소 여부 묻는 경고창.
     NSLog(@"게임종료");
 }
@@ -336,7 +342,8 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
                 [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateAttackPlayer2, nil]];
 
                 mSpriteCatch.visible = true;
-                [mSpriteCatch runAction:[CCSequence actions:mAnimateCatch, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];
+                id action = [CCDelayTime actionWithDuration:0.6f];
+                [mSpriteCatch runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];
                 
                 [mSpriteMosquite LevelUp];
                 mSpriteMosquite.position = CGPointMake(10, 300);
@@ -348,13 +355,15 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
                 [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateCatchPlayer2, nil]];
                 
                 mSpriteAttack.visible = true;
-                [mSpriteAttack runAction:[CCSequence actions:mAnimateAttack, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];
-                
+                id action = [CCDelayTime actionWithDuration:0.6f];         
+                [mSpriteAttack runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]]; 
+
                 mHp--;
                 [self displayHp];
-                if( mHp == 0 ) //hp떨어져서 죽을 때
+                if( mHp <= 0 ) //hp떨어져서 죽을 때
                 {
                     [self GameEnd];
+                    return;
                 }
                 
                 mSpriteMosquite.position = CGPointMake(10, 300);

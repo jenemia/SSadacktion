@@ -18,7 +18,6 @@
 		F382FF7C15B9B4EE00E5FAE5 /* StartIntro.plist in Resources */ = {isa = PBXBuildFile; fileRef = F382FF7A15B9B4EE00E5FAE5 /* StartIntro.plist */; };
 		F382FF7D15B9B4EE00E5FAE5 /* StartIntro.png in Resources */ = {isa = PBXBuildFile; fileRef = F382FF7B15B9B4EE00E5FAE5 /* StartIntro.png */; };
 		F382FF8615B9BF9000E5FAE5 /* CMosquito.m in Sources */ = {isa = PBXBuildFile; fileRef = F382FF8515B9BF9000E5FAE5 /* CMosquito.m */; };
-		F384B93B15B99B4000C0CB5B /* attack_right.png in Resources */ = {isa = PBXBuildFile; fileRef = F384B93815B99B4000C0CB5B /* attack_right.png */; };
 		F384B93C15B99B4000C0CB5B /* catch_right.png in Resources */ = {isa = PBXBuildFile; fileRef = F384B93915B99B4000C0CB5B /* catch_right.png */; };
 		F384B93D15B99B4000C0CB5B /* nomal_right.png in Resources */ = {isa = PBXBuildFile; fileRef = F384B93A15B99B4000C0CB5B /* nomal_right.png */; };
 		F384B94015B9A31600C0CB5B /* mosquito.png in Resources */ = {isa = PBXBuildFile; fileRef = F384B93F15B9A31600C0CB5B /* mosquito.png */; };
@@ -145,7 +144,6 @@
 		F397F2BE15BA5FA800D297E6 /* win.png in Resources */ = {isa = PBXBuildFile; fileRef = F397F2BC15BA5FA800D297E6 /* win.png */; };
 		F397F2C915BA902B00D297E6 /* attack.png in Resources */ = {isa = PBXBuildFile; fileRef = F397F2C715BA902B00D297E6 /* attack.png */; };
 		F397F2CA15BA902B00D297E6 /* catch.png in Resources */ = {isa = PBXBuildFile; fileRef = F397F2C815BA902B00D297E6 /* catch.png */; };
-		F3FA3A4B15B99843009E65C7 /* attack_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FA3A4815B99843009E65C7 /* attack_left.png */; };
 		F3FA3A4C15B99843009E65C7 /* catch_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FA3A4915B99843009E65C7 /* catch_left.png */; };
 		F3FA3A4D15B99843009E65C7 /* nomal_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FA3A4A15B99843009E65C7 /* nomal_left.png */; };
 /* End PBXBuildFile section */
@@ -167,7 +165,6 @@
 		F382FF7B15B9B4EE00E5FAE5 /* StartIntro.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StartIntro.png; sourceTree = "<group>"; };
 		F382FF8415B9BF9000E5FAE5 /* CMosquito.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMosquito.h; path = Objects/CMosquito.h; sourceTree = "<group>"; };
 		F382FF8515B9BF9000E5FAE5 /* CMosquito.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMosquito.m; path = Objects/CMosquito.m; sourceTree = "<group>"; };
-		F384B93815B99B4000C0CB5B /* attack_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attack_right.png; sourceTree = "<group>"; };
 		F384B93915B99B4000C0CB5B /* catch_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = catch_right.png; sourceTree = "<group>"; };
 		F384B93A15B99B4000C0CB5B /* nomal_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nomal_right.png; sourceTree = "<group>"; };
 		F384B93F15B9A31600C0CB5B /* mosquito.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mosquito.png; sourceTree = "<group>"; };
@@ -414,7 +411,6 @@
 		F397F2BC15BA5FA800D297E6 /* win.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = win.png; sourceTree = "<group>"; };
 		F397F2C715BA902B00D297E6 /* attack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attack.png; sourceTree = "<group>"; };
 		F397F2C815BA902B00D297E6 /* catch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = catch.png; sourceTree = "<group>"; };
-		F3FA3A4815B99843009E65C7 /* attack_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attack_left.png; sourceTree = "<group>"; };
 		F3FA3A4915B99843009E65C7 /* catch_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = catch_left.png; sourceTree = "<group>"; };
 		F3FA3A4A15B99843009E65C7 /* nomal_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nomal_left.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -470,10 +466,8 @@
 				F36C5DD015B9793D008DCB5F /* menu_start.png */,
 				F36C5DD115B9793D008DCB5F /* menu_start_s.png */,
 				F36C5DDB15B97B14008DCB5F /* background.png */,
-				F3FA3A4815B99843009E65C7 /* attack_left.png */,
 				F3FA3A4915B99843009E65C7 /* catch_left.png */,
 				F3FA3A4A15B99843009E65C7 /* nomal_left.png */,
-				F384B93815B99B4000C0CB5B /* attack_right.png */,
 				F384B93915B99B4000C0CB5B /* catch_right.png */,
 				F384B93A15B99B4000C0CB5B /* nomal_right.png */,
 				F384B93F15B9A31600C0CB5B /* mosquito.png */,
@@ -951,10 +945,8 @@
 				F36C5DD315B9793D008DCB5F /* menu_start.png in Resources */,
 				F36C5DD415B9793D008DCB5F /* menu_start_s.png in Resources */,
 				F36C5DDC15B97B14008DCB5F /* background.png in Resources */,
-				F3FA3A4B15B99843009E65C7 /* attack_left.png in Resources */,
 				F3FA3A4C15B99843009E65C7 /* catch_left.png in Resources */,
 				F3FA3A4D15B99843009E65C7 /* nomal_left.png in Resources */,
-				F384B93B15B99B4000C0CB5B /* attack_right.png in Resources */,
 				F384B93C15B99B4000C0CB5B /* catch_right.png in Resources */,
 				F384B93D15B99B4000C0CB5B /* nomal_right.png in Resources */,
 				F384B94015B9A31600C0CB5B /* mosquito.png in Resources */,

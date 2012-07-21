@@ -36,9 +36,7 @@
 @property (nonatomic) BOOL mGameStart;
 
 @property (strong, nonatomic) CCSprite* mSpriteAttack;
-@property (strong, nonatomic) CCAnimate* mAnimateAttack;
 @property (strong, nonatomic) CCSprite* mSpriteCatch;
-@property (strong, nonatomic) CCAnimate* mAnimateCatch;
 
 @property (strong, nonatomic) CCSprite* mSpriteGameWin;
 @property (strong, nonatomic) CCSprite* mSpriteGameLose;
