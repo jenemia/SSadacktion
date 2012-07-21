@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F320577C15BB33AA00612C77 /* Client.m in Sources */ = {isa = PBXBuildFile; fileRef = F320577B15BB33AA00612C77 /* Client.m */; };
 		F36C5DC415B97210008DCB5F /* GameMainScene.m in Sources */ = {isa = PBXBuildFile; fileRef = F36C5DC315B97210008DCB5F /* GameMainScene.m */; };
 		F36C5DCB15B9729D008DCB5F /* GameMainLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F36C5DCA15B9729D008DCB5F /* GameMainLayer.m */; };
 		F36C5DD215B9793D008DCB5F /* menu_background.png in Resources */ = {isa = PBXBuildFile; fileRef = F36C5DCF15B9793D008DCB5F /* menu_background.png */; };
@@ -150,6 +151,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F320577A15BB33AA00612C77 /* Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Client.h; path = Objects/Client.h; sourceTree = "<group>"; };
+		F320577B15BB33AA00612C77 /* Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Client.m; path = Objects/Client.m; sourceTree = "<group>"; };
 		F36C5DC215B97210008DCB5F /* GameMainScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameMainScene.h; path = GameScene/GameMainScene.h; sourceTree = "<group>"; };
 		F36C5DC315B97210008DCB5F /* GameMainScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameMainScene.m; path = GameScene/GameMainScene.m; sourceTree = "<group>"; };
 		F36C5DC915B9729D008DCB5F /* GameMainLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameMainLayer.h; path = GameLayer/GameMainLayer.h; sourceTree = "<group>"; };
@@ -489,6 +492,8 @@
 				F382FF8515B9BF9000E5FAE5 /* CMosquito.m */,
 				F397F2AF15BA26E400D297E6 /* SoundManager.h */,
 				F397F2B015BA26E400D297E6 /* SoundManager.m */,
+				F320577A15BB33AA00612C77 /* Client.h */,
+				F320577B15BB33AA00612C77 /* Client.m */,
 			);
 			name = Objects;
 			sourceTree = "<group>";
@@ -1076,6 +1081,7 @@
 				F36C5DDA15B97A88008DCB5F /* GamePlayLayer.m in Sources */,
 				F382FF8615B9BF9000E5FAE5 /* CMosquito.m in Sources */,
 				F397F2B115BA26E400D297E6 /* SoundManager.m in Sources */,
+				F320577C15BB33AA00612C77 /* Client.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

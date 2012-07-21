@@ -8,6 +8,7 @@
 
 #import "GameMainLayer.h"
 #import "GamePlayScene.h"
+#import "Client.h"
 
 enum{
     kTagBacground = 0,
@@ -18,6 +19,7 @@ enum{
 
 @synthesize mMenuGameStart;
 @synthesize mSpriteBackground;
+@synthesize mClient;
 
 -(id)init
 {
@@ -29,6 +31,8 @@ enum{
         mSpriteBackground.anchorPoint = CGPointZero;
         [mSpriteBackground setPosition:CGPointMake(0, 0)];
         [self addChild:mSpriteBackground z:kTagBacground tag:kTagBacground];
+        
+        mClient = [Client sharedClient];
         
         mMenuGameStart = [CCMenuItemImage itemFromNormalImage:@"menu_start.png" selectedImage:@"menu_start_s.png" target:self selector:@selector(GamemenuStart)];
         

@@ -9,6 +9,7 @@
 #import "cocos2d.h"
 
 @class GameMainLayer;
+@class Client;
 
 @interface GameMainScene : CCScene
 {
@@ -16,5 +17,6 @@
 }
 
 @property (strong, nonatomic) GameMainLayer* mLayerGameMain;
+
 
 @end

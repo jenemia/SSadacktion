@@ -9,6 +9,7 @@
 #import "cocos2d.h"
 
 @class CMosquito;
+@class Client;
 
 @interface GamePlayLayer : CCLayer <UIAlertViewDelegate>
 
@@ -43,6 +44,9 @@
 @property (strong, nonatomic) CCSprite* mSpriteGameLose;
 
 @property (strong, nonatomic) UIAlertView* mAlertView;
+
+@property (strong, nonatomic) Client* mClient;
+
 
 +(void)displayScore;
 +(void)displayMosquito;

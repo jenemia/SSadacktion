@@ -8,6 +8,8 @@
 
 #import "cocos2d.h"
 
+@class Client;
+
 @interface GameMainLayer : CCLayer
 {
     CGSize mWinSize;
@@ -15,7 +17,7 @@
 
 @property (strong, nonatomic) CCSprite* mSpriteBackground;
 @property (strong, nonatomic) CCMenuItem* mMenuGameStart;
-
+@property (strong, nonatomic) Client* mClient;
 -(id)init;
 
 @end
