@@ -39,7 +39,7 @@ static SoundManager* _sharedSoundManager = nil;
 {
     if( (self = [super init]) )
     {
-        mSoundIDDic = [NSMutableDictionary dictionary];
+        mSoundIDDic = [[NSMutableDictionary alloc]init];
     }
     return self;
 }
@@ -48,6 +48,7 @@ static SoundManager* _sharedSoundManager = nil;
 {
     @try {
         NSNumber* num = (NSNumber*)[mSoundIDDic objectForKey:fileName];
+        NSLog(@"%d", mSoundIDDic.count);
         SystemSoundID soundID;
         
         if( num == nil )
@@ -58,6 +59,7 @@ static SoundManager* _sharedSoundManager = nil;
             
             num = [[NSNumber alloc]initWithUnsignedInt:soundID];
             [mSoundIDDic setObject:num forKey:fileName];
+            [mSoundIDDic setObject:num forKey:@"aa"];
         }
         else { //같은 파일 있을 때
             soundID = [num unsignedIntValue];

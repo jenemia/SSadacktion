@@ -20,6 +20,7 @@
 
 @synthesize mTimeTarget, mTimeCount, mTimeStay;
 @synthesize mMoveVelocityX, mMoveVelocityY;
+@synthesize mSoundManager;
 
 -(id)init
 {
@@ -31,6 +32,7 @@
         mTimeStay = 1.5;
         mMoveVelocityX = 0;
         mMoveVelocityY = 0;
+        mSoundManager = [SoundManager sharedSoundManager];
     }
     return self;
 }
@@ -46,7 +48,7 @@
     [self unscheduleAllSelectors];
     
     [self schedule:@selector(move) interval:scheduleTimeCount];
-//    [[SoundManager sharedSoundManager]playSystemSound:@"mosquito" fileType:@"wav"];
+    [mSoundManager playSystemSound:@"mosquito" fileType:@"wav"];
 }
 
 //스케쥴로써 모기는 움직인다.
@@ -78,9 +80,7 @@
 {
     NSInteger distanceX = self.position.x - spotX;
     NSInteger distanceY = self.position.y - spotY;
-    
-    NSLog(@"%d : %d", distanceX, distanceY);
-    
+
     mMoveVelocityX = distanceX / 5 * -1;
     mMoveVelocityY = distanceY / 5 * -1;
     
@@ -118,7 +118,7 @@
         mTimeCount = 0;
         [self schedule:@selector(moveAvoid) interval:scheduleTimeCount];
         
-//        [[SoundManager sharedSoundManager]playSystemSound:@"mosquito" fileType:@"wav"];
+        [mSoundManager playSystemSound:@"mosquito" fileType:@"wav"];
         return;
     }
 }
@@ -150,8 +150,7 @@
 
 -(void)LevelUp
 {
-    
-    //[[SoundManager sharedSoundManager]playSystemSound:@"ssadacktion" fileType:@"aif"];
+    [mSoundManager playSystemSound:@"hit" fileType:@"aif"];
     //충돌
     NSLog(@"충돌");
     [self unscheduleAllSelectors]; //모든 스케쥴러 정지
@@ -179,9 +178,9 @@
            {
                return TRUE;
            }
-              
        }
-//   [[SoundManager sharedSoundManager]playSystemSound:@"hit" fileType:@"aif"];
+   [mSoundManager playSystemSound:@"ssadacktion" fileType:@"aif"];
+    mTimeStay += 0.2; //실패 했을 때 모기 체공시간을 늘린다.
     return FALSE;
 }
 

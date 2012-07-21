@@ -18,11 +18,11 @@ enum{
     kTagMosquite
 };
 
-CCLabelTTF* gLabelMosquitoCount;
-NSInteger gMosquitoCount = 1;
+static CCLabelTTF* gLabelMosquitoCount;
+static NSInteger gMosquitoCount = 1;
 
-NSInteger gScore = 0;
-CCLabelTTF* gLabelScore;
+static NSInteger gScore = 0;
+static CCLabelTTF* gLabelScore;
 
 BOOL gBoolTouch = true;
 

@@ -8,6 +8,8 @@
 
 #import "cocos2d.h"
 
+@class SoundManager;
+
 @interface CMosquito : CCSprite
 
 @property (nonatomic) NSInteger mTimeCount;
@@ -16,6 +18,8 @@
 
 @property (nonatomic) NSInteger mMoveVelocityX;
 @property (nonatomic) NSInteger mMoveVelocityY;
+
+@property (strong,nonatomic) SoundManager* mSoundManager; 
 
 -(void)moveStart;
 -(BOOL)checkCollision;
