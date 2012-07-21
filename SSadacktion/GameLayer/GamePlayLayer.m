@@ -92,6 +92,7 @@ BOOL gBoolTouch = true;
         mAlertView.delegate = self;
         
         mJSONAdapter = [JSONAdapter sharedJSONAdapter];
+        [mJSONAdapter Send];
         
         //게임 접속 후 3초 후 시작
         mTimeCount = 0;

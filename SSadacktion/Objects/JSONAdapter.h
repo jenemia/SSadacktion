@@ -14,6 +14,7 @@
 
 @property (strong, nonatomic) NSMutableData* mResponseData;
 @property (strong, nonatomic) NSMutableURLRequest* mRequest;
+@property (strong, nonatomic) NSURLConnection* mConnection;
 @property (strong, nonatomic) JSONPacket* mPacket;
 +(JSONAdapter*)sharedJSONAdapter;
 -(void)Send;

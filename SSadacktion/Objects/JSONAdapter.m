@@ -15,6 +15,7 @@
 @synthesize mResponseData;
 @synthesize mRequest;
 @synthesize mPacket;
+@synthesize mConnection;
 
 static JSONAdapter* _sharedJSONAdapter = nil;
 
@@ -46,11 +47,11 @@ static JSONAdapter* _sharedJSONAdapter = nil;
     {
         mResponseData = [NSMutableData data];		
         mRequest = [[NSMutableURLRequest alloc] init];
-        [mRequest setURL:[NSURL URLWithString:@"http://192.168.0.11:8080"]];
+        [mRequest setURL:[NSURL URLWithString:@"http://192.168.0.11:5555"]];
         [mRequest setCachePolicy:NSURLRequestUseProtocolCachePolicy];
         [mRequest setHTTPMethod:@"POST"];
-        [mRequest setHTTPMethod:@"GET"];
-        [[NSURLConnection alloc] initWithRequest:mRequest delegate:self];
+        mConnection = [[NSURLConnection alloc] initWithRequest:mRequest delegate:self];
+        [mConnection start];
         
         mPacket = [[JSONPacket alloc]init];
     }
@@ -80,17 +81,18 @@ static JSONAdapter* _sharedJSONAdapter = nil;
         
         NSLog(@"%@",text);
         
-        [self Send];
 	}
 }
 
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	[mResponseData setLength:0];
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response 
+{
+//    [mResponseData setLength:0];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	[mResponseData appendData:data];
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data 
+{
+//	[mResponseData appendData:data];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
@@ -101,18 +103,16 @@ static JSONAdapter* _sharedJSONAdapter = nil;
 -(void)Send
 {
     mPacket.mUserName = @"soohyun";
+    mPacket.mRoom = @"0";
+    mPacket.mPlayer = @"0";
+    mPacket.mScore = @"0";
+    mPacket.mState = @"0";
+    mPacket.mPlayState = @"0";
+    mPacket.mPositionX = @"0";
+    mPacket.mPositionY = @"0";
     
     NSMutableData* body = [[NSMutableData data] init];
-//    @property (strong, nonatomic) NSString* mUserName;
-//    @property (strong, nonatomic) NSString* mRoom;
-//    @property (strong, nonatomic) NSString* mPlayer;
-//    @property (strong, nonatomic) NSString* mScore;
-//    @property (strong, nonatomic) NSString* mState;
-//    @property (strong, nonatomic) NSString* mPlayState;
-//    @property (strong, nonatomic) NSString* mPositionX;
-//    @property (strong, nonatomic) NSString* mPositionY;
     NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:
-                          mPacket.mUserName, @"username",
                           mPacket.mRoom, @"room",
                           mPacket.mPlayer, @"player",
                           mPacket.mScore, @"score",
@@ -122,14 +122,16 @@ static JSONAdapter* _sharedJSONAdapter = nil;
                           mPacket.mPositionY, @"positionY",
                           nil];
     //string 
-//    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted
-//                         error:nil];
-//    NSString* _str = [NSString stringWithFormat:@"%@", dic];
-
-    NSString *jsonData = [dic JSONRepresentation];
+    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted
+                         error:nil];
+    NSString* _str = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSLog(@"json:%@",_str);
     
-    [body appendData:[jsonData dataUsingEncoding:NSUTF8StringEncoding]];
+//    NSString *jsonData = [dic JSONRepresentation];
+    
+    [body appendData:[_str dataUsingEncoding:NSUTF8StringEncoding]];
     [mRequest setHTTPBody:body];
+    [[NSURLConnection alloc] initWithRequest:mRequest delegate:self];
 }
 
 
