@@ -9,7 +9,6 @@
 #import "GamePlayLayer.h"
 #import "GameMainScene.h"
 #import "CMosquito.h"
-#import "JSONAdapter.h"
 
 #define ImageWidth 230
 #define ImageHeight 306
@@ -46,7 +45,6 @@ BOOL gBoolTouch = true;
 @synthesize mSpriteCatch, mSpriteAttack_left, mSpriteAttack_right;
 @synthesize mSpriteGameWin, mSpriteGameLose;
 @synthesize mAlertView;
-@synthesize mJSONAdapter;
 
 -(id)init
 {
@@ -90,9 +88,6 @@ BOOL gBoolTouch = true;
         
         mAlertView = [[UIAlertView alloc] initWithTitle:@"게임 메세지" message:@"다시 시작하겠습니까?" delegate:nil cancelButtonTitle:@"취소" otherButtonTitles:@"확인",nil];
         mAlertView.delegate = self;
-        
-        mJSONAdapter = [JSONAdapter sharedJSONAdapter];
-        [mJSONAdapter Send];
         
         //게임 접속 후 3초 후 시작
         mTimeCount = 0;

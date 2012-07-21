@@ -9,7 +9,6 @@
 #import "cocos2d.h"
 
 @class CMosquito;
-@class JSONAdapter;
 
 @interface GamePlayLayer : CCLayer <UIAlertViewDelegate>
 
@@ -44,8 +43,6 @@
 @property (strong, nonatomic) CCSprite* mSpriteGameLose;
 
 @property (strong, nonatomic) UIAlertView* mAlertView;
-
-@property (strong, nonatomic) JSONAdapter* mJSONAdapter;
 
 +(void)displayScore;
 +(void)displayMosquito;
