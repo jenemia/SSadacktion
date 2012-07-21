@@ -58,7 +58,6 @@ static SoundManager* _sharedSoundManager = nil;
             
             num = [[NSNumber alloc]initWithUnsignedInt:soundID];
             [mSoundIDDic setObject:num forKey:fileName];
-            [mSoundIDDic setObject:num forKey:@"aa"];
         }
         else { //같은 파일 있을 때
             soundID = [num unsignedIntValue];

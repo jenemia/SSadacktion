@@ -135,6 +135,8 @@
 		F3897E3815B96A7500784468 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F3897E3715B96A7500784468 /* main.m */; };
 		F3897E3B15B96A7500784468 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F3897E3A15B96A7500784468 /* AppDelegate.m */; };
 		F3897E3E15B96A7500784468 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3897E3D15B96A7500784468 /* RootViewController.m */; };
+		F391A23215BABD0C0073FC15 /* attack_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F391A23015BABD0C0073FC15 /* attack_left.png */; };
+		F391A23315BABD0C0073FC15 /* attack_right.png in Resources */ = {isa = PBXBuildFile; fileRef = F391A23115BABD0C0073FC15 /* attack_right.png */; };
 		F397F2AD15BA0AFB00D297E6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F397F2AC15BA0AFB00D297E6 /* GameKit.framework */; };
 		F397F2B115BA26E400D297E6 /* SoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F397F2B015BA26E400D297E6 /* SoundManager.m */; };
 		F397F2B815BA2B8700D297E6 /* hit.aif in Resources */ = {isa = PBXBuildFile; fileRef = F397F2B515BA2B8700D297E6 /* hit.aif */; };
@@ -142,7 +144,6 @@
 		F397F2BA15BA2B8700D297E6 /* ssadacktion.aif in Resources */ = {isa = PBXBuildFile; fileRef = F397F2B715BA2B8700D297E6 /* ssadacktion.aif */; };
 		F397F2BD15BA5FA800D297E6 /* lose.png in Resources */ = {isa = PBXBuildFile; fileRef = F397F2BB15BA5FA800D297E6 /* lose.png */; };
 		F397F2BE15BA5FA800D297E6 /* win.png in Resources */ = {isa = PBXBuildFile; fileRef = F397F2BC15BA5FA800D297E6 /* win.png */; };
-		F397F2C915BA902B00D297E6 /* attack.png in Resources */ = {isa = PBXBuildFile; fileRef = F397F2C715BA902B00D297E6 /* attack.png */; };
 		F397F2CA15BA902B00D297E6 /* catch.png in Resources */ = {isa = PBXBuildFile; fileRef = F397F2C815BA902B00D297E6 /* catch.png */; };
 		F3FA3A4C15B99843009E65C7 /* catch_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FA3A4915B99843009E65C7 /* catch_left.png */; };
 		F3FA3A4D15B99843009E65C7 /* nomal_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FA3A4A15B99843009E65C7 /* nomal_left.png */; };
@@ -401,6 +402,8 @@
 		F3897E3C15B96A7500784468 /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		F3897E3D15B96A7500784468 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		F3897E4215B96A7500784468 /* GameConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameConfig.h; sourceTree = "<group>"; };
+		F391A23015BABD0C0073FC15 /* attack_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attack_left.png; sourceTree = "<group>"; };
+		F391A23115BABD0C0073FC15 /* attack_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attack_right.png; sourceTree = "<group>"; };
 		F397F2AC15BA0AFB00D297E6 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F397F2AF15BA26E400D297E6 /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundManager.h; path = Objects/SoundManager.h; sourceTree = "<group>"; };
 		F397F2B015BA26E400D297E6 /* SoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SoundManager.m; path = Objects/SoundManager.m; sourceTree = "<group>"; };
@@ -409,7 +412,6 @@
 		F397F2B715BA2B8700D297E6 /* ssadacktion.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = ssadacktion.aif; sourceTree = "<group>"; };
 		F397F2BB15BA5FA800D297E6 /* lose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lose.png; sourceTree = "<group>"; };
 		F397F2BC15BA5FA800D297E6 /* win.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = win.png; sourceTree = "<group>"; };
-		F397F2C715BA902B00D297E6 /* attack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = attack.png; sourceTree = "<group>"; };
 		F397F2C815BA902B00D297E6 /* catch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = catch.png; sourceTree = "<group>"; };
 		F3FA3A4915B99843009E65C7 /* catch_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = catch_left.png; sourceTree = "<group>"; };
 		F3FA3A4A15B99843009E65C7 /* nomal_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nomal_left.png; sourceTree = "<group>"; };
@@ -473,8 +475,9 @@
 				F384B93F15B9A31600C0CB5B /* mosquito.png */,
 				F382FF7A15B9B4EE00E5FAE5 /* StartIntro.plist */,
 				F382FF7B15B9B4EE00E5FAE5 /* StartIntro.png */,
-				F397F2C715BA902B00D297E6 /* attack.png */,
 				F397F2C815BA902B00D297E6 /* catch.png */,
+				F391A23015BABD0C0073FC15 /* attack_left.png */,
+				F391A23115BABD0C0073FC15 /* attack_right.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -957,8 +960,9 @@
 				F397F2BA15BA2B8700D297E6 /* ssadacktion.aif in Resources */,
 				F397F2BD15BA5FA800D297E6 /* lose.png in Resources */,
 				F397F2BE15BA5FA800D297E6 /* win.png in Resources */,
-				F397F2C915BA902B00D297E6 /* attack.png in Resources */,
 				F397F2CA15BA902B00D297E6 /* catch.png in Resources */,
+				F391A23215BABD0C0073FC15 /* attack_left.png in Resources */,
+				F391A23315BABD0C0073FC15 /* attack_right.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

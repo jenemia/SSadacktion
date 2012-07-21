@@ -168,6 +168,10 @@
     mTimeTarget -= 0.2;
     if( mTimeTarget <= 0.5 )
         mTimeTarget = 0.5;
+
+    mTimeStay -= 0.01;
+    if( mTimeStay <= 0.15 )
+        mTimeStay = 0.15;
     
     [GamePlayLayer displayScore]; //점수 올리기
     
@@ -190,6 +194,7 @@
        }
    [mSoundManager playSystemSound:@"ssadacktion" fileType:@"aif"];
     mTimeTarget += 0.2; //실패 했을 때 모기 체공시간을 늘린다.
+    mTimeStay += 0.01;
     return FALSE;
 }
 

@@ -35,7 +35,8 @@
 
 @property (nonatomic) BOOL mGameStart;
 
-@property (strong, nonatomic) CCSprite* mSpriteAttack;
+@property (strong, nonatomic) CCSprite* mSpriteAttack_left;
+@property (strong, nonatomic) CCSprite* mSpriteAttack_right;
 @property (strong, nonatomic) CCSprite* mSpriteCatch;
 
 @property (strong, nonatomic) CCSprite* mSpriteGameWin;

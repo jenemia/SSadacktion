@@ -42,7 +42,7 @@ BOOL gBoolTouch = true;
 @synthesize mTimeCount, mTimeTarget, mHp;
 @synthesize mGameStart;
 @synthesize mLabelGameTime, mGameTime, mLabelHp;
-@synthesize mSpriteCatch, mSpriteAttack;
+@synthesize mSpriteCatch, mSpriteAttack_left, mSpriteAttack_right;
 @synthesize mSpriteGameWin, mSpriteGameLose;
 @synthesize mAlertView;
 
@@ -126,11 +126,17 @@ BOOL gBoolTouch = true;
     mSpriteStartIntro.position = CGPointMake(50, 320);
     [self addChild:mSpriteStartIntro z:kTagIntro tag:kTagIntro];
     
-    mSpriteAttack = [[CCSprite alloc]initWithFile:@"attack.png"];
-    mSpriteAttack.anchorPoint = CGPointMake(0, 0);
-    mSpriteAttack.position = CGPointMake(50, 100);
-    mSpriteAttack.visible = false;
-    [self addChild:mSpriteAttack z:kTagResult tag:kTagResult];
+    mSpriteAttack_left = [[CCSprite alloc]initWithFile:@"attack_left.png"];
+    mSpriteAttack_left.anchorPoint = CGPointMake(0, 0);
+    mSpriteAttack_left.position = CGPointMake(0 , 150);
+    mSpriteAttack_left.visible = false;
+    [self addChild:mSpriteAttack_left z:kTagResult tag:kTagResult];
+    
+    mSpriteAttack_right = [[CCSprite alloc]initWithFile:@"attack_right.png"];
+    mSpriteAttack_right.anchorPoint = CGPointMake(0, 0);
+    mSpriteAttack_right.position = CGPointMake(140, 130);
+    mSpriteAttack_right.visible = false;
+    [self addChild:mSpriteAttack_right z:kTagResult tag:kTagResult];
     
     mSpriteCatch = [[CCSprite alloc]initWithFile:@"catch.png"];
     mSpriteCatch.anchorPoint = CGPointMake(0, 0);
@@ -240,10 +246,10 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     [mSpriteNomalPlayer1 stopAllActions];
     [mSpriteNomalPlayer2 stopAllActions];
     [mSpriteCatch stopAllActions];
-    [mSpriteAttack stopAllActions];
+    [mSpriteAttack_left stopAllActions];
     mSpriteCatch.visible = false;
-    mSpriteAttack.visible = false;
-
+    mSpriteAttack_left.visible = false;
+    mSpriteAttack_right.visible = false;
 }
 
 #pragma mark schedule
@@ -290,7 +296,8 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
 {
     NSLog(@"GameEnd");
     gBoolTouch = false;
-    mSpriteAttack.visible = false;
+    mSpriteAttack_left.visible = false;
+    mSpriteAttack_right.visible = false;
     mSpriteCatch.visible = false;
     
     if( gScore >= 4 )
@@ -354,9 +361,12 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
                 [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateCatchPlayer1, nil]];
                 [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateCatchPlayer2, nil]];
                 
-                mSpriteAttack.visible = true;
+                mSpriteAttack_left.visible = true;
                 id action = [CCDelayTime actionWithDuration:0.6f];         
-                [mSpriteAttack runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]]; 
+                [mSpriteAttack_left runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]]; 
+                
+                mSpriteAttack_right.visible = true;
+                [mSpriteAttack_right runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]]; 
 
                 mHp--;
                 [self displayHp];
@@ -366,7 +376,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
                     return;
                 }
                 
-                mSpriteMosquite.position = CGPointMake(10, 300);
+                mSpriteMosquite.position = CGPointMake(10, 300); //모기의 처음 위치
                 [mSpriteMosquite moveStart];
             }
                         
