@@ -34,17 +34,40 @@ enum{
         
         mClient = [Client sharedClient];
         
-        mMenuGameStart = [CCMenuItemImage itemFromNormalImage:@"menu_start.png" selectedImage:@"menu_start_s.png" target:self selector:@selector(GamemenuStart)];
+        if( mClient.mHost == 1 ) // host
+        {
+            mMenuGameStart = [CCMenuItemImage itemFromNormalImage:@"menu_start.png" selectedImage:@"menu_start_s.png" target:self selector:@selector(GamemenuStart)];
+            
+            CCMenu* menu = [CCMenu menuWithItems:mMenuGameStart, nil];
+            
+            [menu alignItemsVertically];
+                
+            [self addChild:menu z:kTagMenu tag:kTagMenu];
+        } 
+        else ///guest
+        {
+            [self wait];
+        }
         
-        CCMenu* menu = [CCMenu menuWithItems:mMenuGameStart, nil];
-        [menu alignItemsVertically];
-        [self addChild:menu z:kTagMenu tag:kTagMenu];
     }
     return self;
 }
 
+-(void)wait
+{
+    usleep(100);
+    while( !mClient.mGameStart );
+    
+    [self GamemenuStart];
+}
+
 -(void)GamemenuStart
 {
+    if( mClient.mHost == 1 )
+    {
+        mClient.mState = 1;
+        [mClient send];
+    }
     [[CCDirector sharedDirector]pushScene:[GamePlayScene node]];
 }
 @end

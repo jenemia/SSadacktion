@@ -104,10 +104,6 @@ BOOL gBoolTouch = true;
 -(void)setDBAndInit
 {
     mClient = [Client sharedClient];
-    
-    mClient.mState = 1;
-    [mClient send];
-    while(!mClient.mGameStart);
 }
 
 
