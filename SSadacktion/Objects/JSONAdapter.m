@@ -80,19 +80,16 @@ static JSONAdapter* _sharedJSONAdapter = nil;
 			[text appendFormat:@"%@\n", [luckyNumbers objectAtIndex:i]];
         
         NSLog(@"%@",text);
-        
 	}
 }
 
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response 
-{
-//    [mResponseData setLength:0];
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+	[mResponseData setLength:0];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data 
-{
-//	[mResponseData appendData:data];
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	[mResponseData appendData:data];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
@@ -102,14 +99,13 @@ static JSONAdapter* _sharedJSONAdapter = nil;
 #pragma mark method
 -(void)Send
 {
-    mPacket.mUserName = @"soohyun";
     mPacket.mRoom = @"0";
-    mPacket.mPlayer = @"0";
-    mPacket.mScore = @"0";
     mPacket.mState = @"0";
+    mPacket.mPlayer = @"0";
     mPacket.mPlayState = @"0";
     mPacket.mPositionX = @"0";
     mPacket.mPositionY = @"0";
+
     
     NSMutableData* body = [[NSMutableData data] init];
     NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -122,14 +118,13 @@ static JSONAdapter* _sharedJSONAdapter = nil;
                           mPacket.mPositionY, @"positionY",
                           nil];
     //string 
-    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted
-                         error:nil];
-    NSString* _str = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSLog(@"json:%@",_str);
+//    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted
+//                         error:nil];
+//    NSString* _str = [NSString stringWithFormat:@"%@", dic];
+
+    NSString *jsonData = [dic JSONRepresentation];
     
-//    NSString *jsonData = [dic JSONRepresentation];
-    
-    [body appendData:[_str dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[jsonData dataUsingEncoding:NSUTF8StringEncoding]];
     [mRequest setHTTPBody:body];
     [[NSURLConnection alloc] initWithRequest:mRequest delegate:self];
 }

@@ -305,7 +305,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     mSpriteAttack_right.visible = false;
     mSpriteCatch.visible = false;
     
-    if( gScore >= 4 )
+    if( mHp >= 1 )
     {
         NSLog(@"win");
         mSpriteGameWin = [[CCSprite alloc]initWithFile:@"win.png"];
