@@ -8,10 +8,13 @@
 
 #import "JSONAdapter.h"
 #import "JSON.h"
+#import "JSONPacket.h"
 
 @implementation JSONAdapter
 
 @synthesize mResponseData;
+@synthesize mRequest;
+@synthesize mPacket;
 
 static JSONAdapter* _sharedJSONAdapter = nil;
 
@@ -41,21 +44,21 @@ static JSONAdapter* _sharedJSONAdapter = nil;
 {
     if( self = [super init] )
     {
-        NSLog(@"init");
         mResponseData = [NSMutableData data];		
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-        [request setURL:[NSURL URLWithString:@"http://192.168.0.11:5554"]];
-        [request setCachePolicy:NSURLRequestUseProtocolCachePolicy];
-        [request setHTTPMethod:@"POST"];
-        [request setHTTPMethod:@"GET"];
-        [[NSURLConnection alloc] initWithRequest:request delegate:self];
+        mRequest = [[NSMutableURLRequest alloc] init];
+        [mRequest setURL:[NSURL URLWithString:@"http://192.168.0.11:8080"]];
+        [mRequest setCachePolicy:NSURLRequestUseProtocolCachePolicy];
+        [mRequest setHTTPMethod:@"POST"];
+        [mRequest setHTTPMethod:@"GET"];
+        [[NSURLConnection alloc] initWithRequest:mRequest delegate:self];
+        
+        mPacket = [[JSONPacket alloc]init];
     }
     return self;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection 
 {
-    NSLog(@"connectied");
 	[connection release];
 	
 	NSString *responseString = [[NSString alloc] initWithData:mResponseData 
@@ -67,7 +70,8 @@ static JSONAdapter* _sharedJSONAdapter = nil;
 	[responseString release];	
 	
 	if (luckyNumbers == nil)
-		NSLog(@"%@",[NSString stringWithFormat:@"JSON parsing failed: %@", [error localizedDescription]]);
+		NSLog(@"%@",[NSString stringWithFormat:@"JSON parsing failed: %@", 
+                     [error localizedDescription]]);
 	else {		
 		NSMutableString *text = [NSMutableString stringWithString:@"Lucky numbers:\n"];
 		
@@ -75,6 +79,8 @@ static JSONAdapter* _sharedJSONAdapter = nil;
 			[text appendFormat:@"%@\n", [luckyNumbers objectAtIndex:i]];
         
         NSLog(@"%@",text);
+        
+        [self Send];
 	}
 }
 
@@ -89,6 +95,41 @@ static JSONAdapter* _sharedJSONAdapter = nil;
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	NSLog(@"%@", [NSString stringWithFormat:@"Connection failed: %@", [error description]] );
+}
+
+#pragma mark method
+-(void)Send
+{
+    mPacket.mUserName = @"soohyun";
+    
+    NSMutableData* body = [[NSMutableData data] init];
+//    @property (strong, nonatomic) NSString* mUserName;
+//    @property (strong, nonatomic) NSString* mRoom;
+//    @property (strong, nonatomic) NSString* mPlayer;
+//    @property (strong, nonatomic) NSString* mScore;
+//    @property (strong, nonatomic) NSString* mState;
+//    @property (strong, nonatomic) NSString* mPlayState;
+//    @property (strong, nonatomic) NSString* mPositionX;
+//    @property (strong, nonatomic) NSString* mPositionY;
+    NSDictionary* dic = [NSDictionary dictionaryWithObjectsAndKeys:
+                          mPacket.mUserName, @"username",
+                          mPacket.mRoom, @"room",
+                          mPacket.mPlayer, @"player",
+                          mPacket.mScore, @"score",
+                          mPacket.mState, @"state",
+                          mPacket.mPlayState, @"playstate",
+                          mPacket.mPositionX, @"positionX",
+                          mPacket.mPositionY, @"positionY",
+                          nil];
+    //string 
+//    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted
+//                         error:nil];
+//    NSString* _str = [NSString stringWithFormat:@"%@", dic];
+
+    NSString *jsonData = [dic JSONRepresentation];
+    
+    [body appendData:[jsonData dataUsingEncoding:NSUTF8StringEncoding]];
+    [mRequest setHTTPBody:body];
 }
 
 

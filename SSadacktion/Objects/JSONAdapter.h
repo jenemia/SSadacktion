@@ -8,8 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+@class JSONPacket;
+
 @interface JSONAdapter : NSObject
 
 @property (strong, nonatomic) NSMutableData* mResponseData;
+@property (strong, nonatomic) NSMutableURLRequest* mRequest;
+@property (strong, nonatomic) JSONPacket* mPacket;
 +(JSONAdapter*)sharedJSONAdapter;
+-(void)Send;
 @end

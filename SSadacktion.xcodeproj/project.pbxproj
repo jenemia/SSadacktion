@@ -144,6 +144,7 @@
 		F391A24A15BACE6B0073FC15 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F391A24315BACE6B0073FC15 /* SBJsonParser.m */; };
 		F391A24B15BACE6B0073FC15 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = F391A24515BACE6B0073FC15 /* SBJsonWriter.m */; };
 		F391A24E15BACEB10073FC15 /* JSONAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = F391A24D15BACEB10073FC15 /* JSONAdapter.m */; };
+		F391A25515BAD7370073FC15 /* JSONPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = F391A25415BAD7370073FC15 /* JSONPacket.m */; };
 		F397F2AD15BA0AFB00D297E6 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F397F2AC15BA0AFB00D297E6 /* GameKit.framework */; };
 		F397F2B115BA26E400D297E6 /* SoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F397F2B015BA26E400D297E6 /* SoundManager.m */; };
 		F397F2B815BA2B8700D297E6 /* hit.aif in Resources */ = {isa = PBXBuildFile; fileRef = F397F2B515BA2B8700D297E6 /* hit.aif */; };
@@ -426,6 +427,8 @@
 		F391A24515BACE6B0073FC15 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		F391A24C15BACEB10073FC15 /* JSONAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONAdapter.h; path = Objects/JSONAdapter.h; sourceTree = "<group>"; };
 		F391A24D15BACEB10073FC15 /* JSONAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONAdapter.m; path = Objects/JSONAdapter.m; sourceTree = "<group>"; };
+		F391A25315BAD7370073FC15 /* JSONPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONPacket.h; path = Objects/JSONPacket.h; sourceTree = "<group>"; };
+		F391A25415BAD7370073FC15 /* JSONPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONPacket.m; path = Objects/JSONPacket.m; sourceTree = "<group>"; };
 		F397F2AC15BA0AFB00D297E6 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		F397F2AF15BA26E400D297E6 /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundManager.h; path = Objects/SoundManager.h; sourceTree = "<group>"; };
 		F397F2B015BA26E400D297E6 /* SoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SoundManager.m; path = Objects/SoundManager.m; sourceTree = "<group>"; };
@@ -513,6 +516,8 @@
 				F397F2B015BA26E400D297E6 /* SoundManager.m */,
 				F391A24C15BACEB10073FC15 /* JSONAdapter.h */,
 				F391A24D15BACEB10073FC15 /* JSONAdapter.m */,
+				F391A25315BAD7370073FC15 /* JSONPacket.h */,
+				F391A25415BAD7370073FC15 /* JSONPacket.m */,
 			);
 			name = Objects;
 			sourceTree = "<group>";
@@ -1128,6 +1133,7 @@
 				F391A24A15BACE6B0073FC15 /* SBJsonParser.m in Sources */,
 				F391A24B15BACE6B0073FC15 /* SBJsonWriter.m in Sources */,
 				F391A24E15BACEB10073FC15 /* JSONAdapter.m in Sources */,
+				F391A25515BAD7370073FC15 /* JSONPacket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
