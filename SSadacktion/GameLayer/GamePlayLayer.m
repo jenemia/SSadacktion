@@ -19,9 +19,9 @@ enum{
 };
 
 CCLabelTTF* gLabelMosquitoCount;
-NSInteger gMosquitoCount;
+NSInteger gMosquitoCount = 1;
 
-NSInteger gScore;
+NSInteger gScore = 0;
 CCLabelTTF* gLabelScore;
 
 BOOL gBoolTouch = true;
@@ -154,21 +154,11 @@ BOOL gBoolTouch = true;
     gLabelScore.position = CGPointMake(200, 450);
     [self addChild:gLabelScore z:kTagLabel tag:kTagLabel];
     
-    gLabelMosquitoCount = [CCLabelTTF labelWithString:@"Mosquito : 0" fontName:@"Arial" fontSize:18];
+    gLabelMosquitoCount = [CCLabelTTF labelWithString:@"Mosquito : 1" fontName:@"Arial" fontSize:18];
     gLabelMosquitoCount.anchorPoint = CGPointMake(0, 0);
     gLabelMosquitoCount.position = CGPointMake(200, 420);
     [self addChild:gLabelMosquitoCount z:kTagLabel tag:kTagLabel];
 }
-
--(void)completeAnimateA
-{
-    [mSpriteNomalPlayer1 stopAllActions];
-}
--(void)completeAnimateB
-{
-    [mSpriteNomalPlayer2 stopAllActions];
-}
-
 //점수 올라감
 +(void)displayScore
 {
@@ -189,6 +179,17 @@ BOOL gBoolTouch = true;
 {
     gBoolTouch = result;
 }
+
+-(void)completeAnimateA
+{
+    [mSpriteNomalPlayer1 stopAllActions];
+}
+-(void)completeAnimateB
+{
+    [mSpriteNomalPlayer2 stopAllActions];
+}
+
+
 #pragma mark schedule
 //start intro 끝나고 나서 호출됨.
 -(void)IntroEnd
@@ -209,13 +210,23 @@ BOOL gBoolTouch = true;
         if( gBoolTouch == true )
         {
             gBoolTouch = false;
-            [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateAttackPlayer1, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateA)],nil]];
-            [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateAttackPlayer2, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateB)],nil]];
             
-            [mSpriteMosquite checkCollision]; //모기 충돌 체크
+            if( [mSpriteMosquite checkCollision] ) //모기 충돌 체크
+            {
+                [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateAttackPlayer1, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateA)],nil]];
+                [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateAttackPlayer2, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateB)],nil]];
+                [mSpriteMosquite LevelUp];
+            }
+            else 
+            {
+                [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateCatchPlayer1, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateA)],nil]];
+                [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateCatchPlayer2, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimateB)],nil]];
+            }
+                        
         }
     }
 }
+
 
 -(void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {

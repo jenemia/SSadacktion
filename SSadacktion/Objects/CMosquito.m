@@ -148,6 +148,23 @@
     [GamePlayLayer displayMosquito]; //게임화면 모기 카운트 늘리고
 }
 
+-(void)LevelUp
+{
+    
+    //[[SoundManager sharedSoundManager]playSystemSound:@"ssadacktion" fileType:@"aif"];
+    //충돌
+    NSLog(@"충돌");
+    [self unscheduleAllSelectors]; //모든 스케쥴러 정지
+    mTimeStay -= 0.2; //머무는 시간 줄여서 난이도 높이기
+    if( mTimeStay < 0.5 )
+        mTimeStay = 0.5;
+    
+    
+    [GamePlayLayer displayScore]; //점수 올리기
+    
+    [self resetMosquito];
+}
+
 -(BOOL)checkCollision
 {
     NSLog(@"머물었던 시간 : %f", mTimeStay);
@@ -160,18 +177,6 @@
            if( (position.y >= spotY-imageHeight && position.y <= spotY) ||
               (position.y-imageHeight >= spotY-imageHeight && position.y-imageHeight <= spotY) )
            {
-//               [[SoundManager sharedSoundManager]playSystemSound:@"ssadacktion" fileType:@"aif"];
-               //충돌
-               NSLog(@"충돌");
-               [self unscheduleAllSelectors]; //모든 스케쥴러 정지
-               mTimeStay -= 0.2; //머무는 시간 줄여서 난이도 높이기
-               if( mTimeStay < 0.5 )
-                   mTimeStay = 0.5;
-               
-               
-               [GamePlayLayer displayScore]; //점수 올리기
-               
-               [self resetMosquito];
                return TRUE;
            }
               

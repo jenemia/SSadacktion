@@ -19,4 +19,5 @@
 
 -(void)moveStart;
 -(BOOL)checkCollision;
+-(void)LevelUp;
 @end
