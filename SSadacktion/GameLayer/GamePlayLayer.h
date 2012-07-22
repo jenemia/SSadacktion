@@ -45,7 +45,7 @@
 
 @property (strong, nonatomic) UIAlertView* mAlertView;
 
-@property (strong, nonatomic) Client* mClient;
+//@property (strong, nonatomic) Client* mClient;
 
 
 +(void)displayScore;

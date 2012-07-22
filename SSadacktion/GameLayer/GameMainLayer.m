@@ -32,9 +32,9 @@ enum{
         [mSpriteBackground setPosition:CGPointMake(0, 0)];
         [self addChild:mSpriteBackground z:kTagBacground tag:kTagBacground];
         
-        mClient = [Client sharedClient];
-        [mClient StartThread];
-        if( [mClient.mHost isEqualToString:@"1"]) // host
+//        mClient = [Client sharedClient];
+//        [mClient StartThread];
+//        if( [mClient.mHost isEqualToString:@"1"]) // host
         {
             mMenuGameStart = [CCMenuItemImage itemFromNormalImage:@"menu_start.png" selectedImage:@"menu_start_s.png" target:self selector:@selector(GamemenuStart)];
             
@@ -44,9 +44,9 @@ enum{
                 
             [self addChild:menu z:kTagMenu tag:kTagMenu];
         } 
-        else ///guest
+//        else ///guest
         {
-            [self schedule:@selector(wait)];
+//            [self schedule:@selector(wait)];
         }
         
     }
@@ -63,9 +63,9 @@ enum{
 
 -(void)GamemenuStart
 {
-        mClient.mState = @"1";
-        [mClient send];
-        while( !mClient.mGameStart );
+//        mClient.mState = @"1";
+//        [mClient send];
+//        while( !mClient.mGameStart );
     
     [[CCDirector sharedDirector]pushScene:[GamePlayScene node]];
 }

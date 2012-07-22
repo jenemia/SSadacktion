@@ -9,7 +9,7 @@
 #import "GamePlayLayer.h"
 #import "GameMainScene.h"
 #import "CMosquito.h"
-#import "Client.h"
+//#import "Client.h"
 
 #define ImageWidth 230
 #define ImageHeight 306
@@ -46,7 +46,7 @@ BOOL gBoolTouch = true;
 @synthesize mSpriteCatch, mSpriteAttack_left, mSpriteAttack_right;
 @synthesize mSpriteGameWin, mSpriteGameLose;
 @synthesize mAlertView;
-@synthesize mClient;
+//@synthesize mClient;
 
 -(id)init
 {
@@ -103,7 +103,7 @@ BOOL gBoolTouch = true;
 
 -(void)setDBAndInit
 {
-    mClient = [Client sharedClient];
+//    mClient = [Client sharedClient];
 }
 
 
