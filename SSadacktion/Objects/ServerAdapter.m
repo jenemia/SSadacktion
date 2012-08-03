@@ -107,7 +107,7 @@ static ServerAdapter* _shreadServerAdapter;
     char text[1024] = {0,}; 
     int len;
     
-    len = read(mSocket, text, 1024);
+    len = read(mSocket, text, 1024*4);
 
     NSString* _recevieStr = [[NSString alloc]initWithFormat:@"%s",text];
 //    NSLog(@"receive : %@", _recevieStr);

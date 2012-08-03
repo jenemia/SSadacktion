@@ -31,7 +31,9 @@ enum{
     pTagInit = 0,
     pTagWait,
     pTagStart,
-    pTagMove
+    pTagMove,
+    pTagSuccess,
+    pTagFail
 };
 
 
@@ -52,12 +54,13 @@ static NSInteger gScore = 0;
 static CCLabelTTF* gLabelScore;
 
 BOOL gBoolTouch = true;
+BOOL gBoolReceive = true;
 
 @implementation GamePlayLayer
 
 @synthesize mSpriteBackground, mSpriteStartIntro, mAnimateStartIntro;
-@synthesize mSpriteNomalPlayer1, mAnimateAttackPlayer1, mAnimateCatchPlayer1;
-@synthesize mSpriteNomalPlayer2, mAnimateAttackPlayer2, mAnimateCatchPlayer2;
+@synthesize mSpriteNomalPlayer1, mAnimateReadyPlayer1;
+@synthesize mSpriteNomalPlayer2, mAnimateReadyPlayer2;
 @synthesize mSpriteMosquite;
 @synthesize mTimeCount, mTimeTarget, mHp;
 @synthesize mLabelGameTime, mGameTime, mLabelHp;
@@ -66,6 +69,7 @@ BOOL gBoolTouch = true;
 @synthesize mGameStart;
 @synthesize mReceivePacket, mServerAdapter;
 @synthesize mUser;
+@synthesize mReceiveThread;
 -(id)init
 {
     if( self = [super init] )
@@ -80,20 +84,12 @@ BOOL gBoolTouch = true;
         [self createBackground];
         [self createPlayer];
         
-        mAnimateAttackPlayer1 = [CCAnimate alloc];
-        [self createAnimate:mAnimateAttackPlayer1 runImage:@"catch_left.png" 
+        mAnimateReadyPlayer1 = [CCAnimate alloc];
+        [self createAnimate:mAnimateReadyPlayer1 runImage:@"ready_left.png" 
                   lastImage:@"nomal_left.png" delay:0.02f];
         
-        mAnimateCatchPlayer1 = [CCAnimate alloc];
-        [self createAnimate:mAnimateCatchPlayer1 runImage:@"catch_left.png" 
-                  lastImage:@"nomal_left.png" delay:0.02f];
-        
-        mAnimateAttackPlayer2 = [CCAnimate alloc];
-        [self createAnimate:mAnimateAttackPlayer2 runImage:@"catch_right.png" 
-                  lastImage:@"nomal_right.png" delay:0.02f];
-        
-        mAnimateCatchPlayer2 = [CCAnimate alloc];
-        [self createAnimate:mAnimateCatchPlayer2 runImage:@"catch_right.png" 
+        mAnimateReadyPlayer2 = [CCAnimate alloc];
+        [self createAnimate:mAnimateReadyPlayer2 runImage:@"ready_right.png" 
                   lastImage:@"nomal_right.png" delay:0.02f];
         
         [self createLabels];
@@ -117,12 +113,18 @@ BOOL gBoolTouch = true;
         {
             mReceivePacket = [[Packet alloc]init];
             [mServerAdapter connect];
-            NSThread* waitThread = [[NSThread alloc]initWithTarget:self selector:@selector(GameWaitting) object:nil];
-            [waitThread start];
+            [self schedule:@selector(GameWaitting) interval:0.05];
+//            NSThread* waitThread = [[NSThread alloc]initWithTarget:self selector:@selector(GameWaitting) object:nil];
+//            [waitThread start];
+            
+            //서버의 패킷을 계속 받기 위하여
+            mReceiveThread = [[NSThread alloc]initWithTarget:self selector:@selector(ReceivingServer) object:nil];
+            gBoolReceive = true;
         }
         else // 솔로 플레이
         {
             //게임 접속 후 3초 후 시작
+            mUser.mHost = [NSNumber numberWithInt:1];
             mTimeCount = 0;
             [mSpriteStartIntro runAction:[CCSequence actions:mAnimateStartIntro, [CCCallFunc actionWithTarget:self selector:@selector(GameStart)],nil]];       
         }
@@ -312,6 +314,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     }
     
     //게임 접속 후 3초 후 시작
+    [self unschedule:@selector(GameWaitting)];
     mTimeCount = 0;
     [mSpriteStartIntro runAction:[CCSequence actions:mAnimateStartIntro, [CCCallFunc actionWithTarget:self selector:@selector(GameStart)],nil]];    
 }
@@ -320,6 +323,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
 //start intro 끝나고 나서 호출됨.
 -(void)GameStart
 {
+    [self unscheduleAllSelectors];
     //인트로 끝내고, display초기화
     mSpriteStartIntro.visible = FALSE;
     mGameStart = true;
@@ -343,6 +347,10 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     mSpriteGameLose.visible = false;
     
     [self schedule:@selector(GameFlowTime) interval:1.0f]; //30초 제한 카운트
+    //[self schedule:@selector(ReceivingServer) interval:MosquitoScheduleTimeCount];
+    
+    gBoolReceive = true;
+    [mReceiveThread start];
     
     
     [self displayMosquito]; //모기 카운트 늘린다
@@ -404,15 +412,6 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     
         [mServerAdapter send:sendPacket];
     }
-
-    mReceivePacket = [mServerAdapter receive];
-    if( ![mUser.mHost intValue] )
-    {
-        CGPoint newPo = CGPointMake([mReceivePacket.mX intValue], [mReceivePacket.mY intValue]);
-        [mSpriteMosquite setPosition:newPo];
-        NSLog(@"new");
-    }
-    
 }
 
 -(void)GameFlowTime
@@ -431,6 +430,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     mSpriteAttack_left.visible = false;
     mSpriteAttack_right.visible = false;
     mSpriteCatch.visible = false;
+    gBoolReceive = false;
     
     if( mHp >= 1 )
     {
@@ -466,6 +466,59 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     NSLog(@"게임종료");
 }
 
+-(void)ReceivingServer
+{
+    while(gBoolReceive)
+    {
+        mReceivePacket = [mServerAdapter receive];
+        switch ([mReceivePacket.mState intValue]) {
+            case pTagMove: //모기 날라가는 패킷
+                if( ![mUser.mHost intValue] ) //호스트가 아닐 때만 위치를 받는다.
+                {
+                    CGPoint newPo = CGPointMake([mReceivePacket.mX intValue], [mReceivePacket.mY intValue]);
+                    [mSpriteMosquite setPosition:newPo];
+                }
+                break;
+            case pTagFail :
+            {
+                NSLog(@"fail");
+                id action = [CCDelayTime actionWithDuration:0.6f];   
+                if( [mReceivePacket.mHost intValue] ) //host는 왼쪽
+                {
+                    [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateReadyPlayer1, nil]];
+                    
+                    mSpriteAttack_left.visible = true;      
+                    [mSpriteAttack_left runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];                     
+                }
+                else  // 오른쪽
+                {
+                    [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateReadyPlayer2, nil]];
+                    
+                    mSpriteAttack_right.visible = true;
+                    [mSpriteAttack_right runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];                     
+                }
+                
+                mHp--;
+                [self displayHp];
+                if( mHp <= 0 ) //hp떨어져서 죽을 때
+                {
+                    [self GameEnd];
+                    return;
+                }
+                
+                mSpriteMosquite.position = CGPointMake(10, 300); //모기의 처음 위치
+                [mSpriteMosquite moveSetting];
+                mSpriteMosquite.mState = mTagMove;
+                gBoolTouch = true;
+            }   
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
 #pragma mark event
 -(void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -477,8 +530,8 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
             
             if( [mSpriteMosquite checkCollision] ) //모기 충돌 체크
             {
-                [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateAttackPlayer1, nil]];
-                [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateAttackPlayer2, nil]];
+                [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateReadyPlayer1, nil]];
+                [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateReadyPlayer2, nil]];
 
                 mSpriteCatch.visible = true;
                 id action = [CCDelayTime actionWithDuration:0.6f];
@@ -491,27 +544,12 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
             }
             else  //실패, 싸다구
             {
-                [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateCatchPlayer1, nil]];
-                [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateCatchPlayer2, nil]];
-                
-                mSpriteAttack_left.visible = true;
-                id action = [CCDelayTime actionWithDuration:0.6f];         
-                [mSpriteAttack_left runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]]; 
-                
-                mSpriteAttack_right.visible = true;
-                [mSpriteAttack_right runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]]; 
-
-                mHp--;
-                [self displayHp];
-                if( mHp <= 0 ) //hp떨어져서 죽을 때
-                {
-                    [self GameEnd];
-                    return;
-                }
-                
-                mSpriteMosquite.position = CGPointMake(10, 300); //모기의 처음 위치
-                [mSpriteMosquite moveSetting];
-                mSpriteMosquite.mState = mTagMove;
+                Packet* sendPacket = [[Packet alloc]init];
+                sendPacket.mState = [NSNumber numberWithInt:pTagFail];
+                [sendPacket SetPacketWithUser:mUser];
+                sendPacket.mX = [NSNumber numberWithInt:1];
+                sendPacket.mY = [NSNumber numberWithInt:1];
+                [mServerAdapter send:sendPacket];
             }
                         
         }

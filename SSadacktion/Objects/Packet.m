@@ -31,11 +31,6 @@
     return self;
 }
 
--(void)dealloc
-{
-    [super dealloc];
-}
-
 -(void)SetPacketWithUser:(User *)user
 {
     mRoom = user.mRoom;

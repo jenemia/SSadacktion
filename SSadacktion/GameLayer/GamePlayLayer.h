@@ -20,12 +20,10 @@
 @property (strong, nonatomic) CCAnimate* mAnimateStartIntro;
 //플레이어 케릭터, 각 상태에 따라
 @property (strong, nonatomic) CCSprite* mSpriteNomalPlayer1;
-@property (strong, nonatomic) CCAnimate* mAnimateAttackPlayer1;
-@property (strong, nonatomic) CCAnimate* mAnimateCatchPlayer1;
+@property (strong, nonatomic) CCAnimate* mAnimateReadyPlayer1;
 
 @property (strong, nonatomic) CCSprite* mSpriteNomalPlayer2;
-@property (strong, nonatomic) CCAnimate* mAnimateAttackPlayer2;
-@property (strong, nonatomic) CCAnimate* mAnimateCatchPlayer2;
+@property (strong, nonatomic) CCAnimate* mAnimateReadyPlayer2;
 //모기
 @property (strong, nonatomic) CMosquito* mSpriteMosquite;
 //게임 인터페이스
@@ -50,6 +48,8 @@
 @property (strong, nonatomic) ServerAdapter* mServerAdapter;
 //게임 유저 정보
 @property (strong, nonatomic) User* mUser;
+
+@property (strong, nonatomic) NSThread* mReceiveThread;
 
 +(void)displayScore;
 //-(void)displayMosquito;
