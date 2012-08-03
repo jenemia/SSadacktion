@@ -10,4 +10,9 @@
 
 @interface User : NSObject
 
+@property (strong, nonatomic) NSNumber* mPlayer;
+@property (strong, nonatomic) NSNumber* mRoom;
+@property (strong, nonatomic) NSNumber* mHost;
+
++(User*)sharedUser;
 @end

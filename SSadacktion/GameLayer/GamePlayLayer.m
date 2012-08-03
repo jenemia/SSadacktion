@@ -9,7 +9,9 @@
 #import "GamePlayLayer.h"
 #import "GameMainScene.h"
 #import "CMosquito.h"
-//#import "Client.h"
+#import "Packet.h"
+#import "ServerAdapter.h"
+#import "User.h"
 
 #define ImageWidth 230
 #define ImageHeight 306
@@ -22,6 +24,12 @@ enum{
     kTagIntro,
     kTagMosquite,
     kTagResult
+};
+
+enum{
+    pTagInit = 0,
+    pTagWait,
+    pTagStart
 };
 
 //지나간 모기 수
@@ -41,13 +49,12 @@ BOOL gBoolTouch = true;
 @synthesize mSpriteNomalPlayer2, mAnimateAttackPlayer2, mAnimateCatchPlayer2;
 @synthesize mSpriteMosquite;
 @synthesize mTimeCount, mTimeTarget, mHp;
-@synthesize mGameStart;
 @synthesize mLabelGameTime, mGameTime, mLabelHp;
 @synthesize mSpriteCatch, mSpriteAttack_left, mSpriteAttack_right;
-@synthesize mSpriteGameWin, mSpriteGameLose;
-@synthesize mAlertView;
-//@synthesize mClient;
-
+@synthesize mSpriteGameWin, mSpriteGameLose,mAlertView;
+@synthesize mGameStart;
+@synthesize mReceivePacket, mServerAdapter;
+@synthesize mUser;
 -(id)init
 {
     if( self = [super init] )
@@ -91,23 +98,28 @@ BOOL gBoolTouch = true;
         mAlertView = [[UIAlertView alloc] initWithTitle:@"게임 메세지" message:@"다시 시작하겠습니까?" delegate:nil cancelButtonTitle:@"취소" otherButtonTitles:@"확인",nil];
         mAlertView.delegate = self;
         
-        [self setDBAndInit];
+        mServerAdapter = [ServerAdapter sharedServerAdapter];
+        mUser = [User sharedUser];
         
-        //게임 접속 후 3초 후 시작
-        mTimeCount = 0;
-        [mSpriteStartIntro runAction:[CCSequence actions:mAnimateStartIntro, [CCCallFunc actionWithTarget:self selector:@selector(IntroEnd)],nil]];
-        
+        //서버를 연결 했다면 기다렸다가 시작
+        if( mServerAdapter.mServerOn )
+        {
+            mReceivePacket = [[Packet alloc]init];
+            [mServerAdapter connect];
+            NSThread* waitThread = [[NSThread alloc]initWithTarget:self selector:@selector(GameWaitting) object:nil];
+            [waitThread start];
+        }
+        else // 솔로 플레이
+        {
+            //게임 접속 후 3초 후 시작
+            mTimeCount = 0;
+            [mSpriteStartIntro runAction:[CCSequence actions:mAnimateStartIntro, [CCCallFunc actionWithTarget:self selector:@selector(GameStart)],nil]];       
+        }
     }
     return self;
 }
 
--(void)setDBAndInit
-{
-//    mClient = [Client sharedClient];
-}
-
-
-#pragma mark method
+#pragma mark create
 
 -(void)createBackground
 {
@@ -215,6 +227,9 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     mLabelHp.visible = false;
     [self addChild:mLabelHp z:kTagLabel tag:kTagLabel];
 }
+
+#pragma mark display
+
 //점수 올라감
 +(void)displayScore
 {
@@ -224,7 +239,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
 }
 
 //모기 숫자 올라감
-+(void)displayMosquito
+-(void)displayMosquito
 {
     gMosquitoCount++;
     NSString* str = [[NSString alloc]initWithFormat:@"Mosquito : %d", gMosquitoCount];
@@ -256,15 +271,43 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     [mSpriteNomalPlayer2 stopAllActions];
     [mSpriteCatch stopAllActions];
     [mSpriteAttack_left stopAllActions];
+    
+    gBoolTouch = true;
     mSpriteCatch.visible = false;
     mSpriteAttack_left.visible = false;
     mSpriteAttack_right.visible = false;
 }
 
 #pragma mark schedule
-//start intro 끝나고 나서 호출됨.
--(void)IntroEnd
+//Room에 player가 두명 들어 올때까지 대기
+-(void)GameWaitting
 {
+    while(true)
+    {
+        Packet* sendPacket = [[Packet alloc]init];
+        sendPacket.mState = [NSNumber numberWithInt:pTagWait];
+        [sendPacket SetPacketWithUser:mUser];
+        
+        [mServerAdapter send:sendPacket];
+        
+        mReceivePacket = [mServerAdapter receive];
+        if( [mReceivePacket.mState intValue] == pTagStart ) //서버에서 게임 시작을 알리면.
+        {
+            break;
+        }
+        NSLog(@"wait");
+    }
+    
+    //게임 접속 후 3초 후 시작
+    mTimeCount = 0;
+    [mSpriteStartIntro runAction:[CCSequence actions:mAnimateStartIntro, [CCCallFunc actionWithTarget:self selector:@selector(GameStart)],nil]];    
+}
+
+
+//start intro 끝나고 나서 호출됨.
+-(void)GameStart
+{
+    //인트로 끝내고, display초기화
     mSpriteStartIntro.visible = FALSE;
     mGameStart = true;
     gScore = 0;
@@ -273,6 +316,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     mHp = 5;
     NSLog(@"Game Start!!");
     
+    //모기,display화면에 출력
     mSpriteMosquite.visible = true;
     gLabelScore.visible = true;
     gLabelMosquitoCount.visible = true;
@@ -282,17 +326,19 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     NSString* str = [[NSString alloc]initWithFormat:@"Score : %d", gScore];
     [gLabelScore setString:str];
     
-    mSpriteGameWin = false;
-    mSpriteGameLose = false;
+    mSpriteGameWin.visible = false;
+    mSpriteGameLose.visible = false;
     
-    [self schedule:@selector(gameStartTime) interval:1.0f];
+    [self schedule:@selector(GameFlowTime) interval:1.0f]; //30초 제한 카운트
     
-    mSpriteMosquite.position = CGPointMake(10, 300);
+    
+    [self displayMosquito]; //모기 카운트 늘린다
+    gBoolTouch = TRUE;
     mSpriteMosquite.mTimeTarget = 1.5f;
     [mSpriteMosquite moveStart];
 }
 
--(void)gameStartTime
+-(void)GameFlowTime
 {   
     [self displayGameTime];
     if( mGameTime == 30 )
@@ -401,13 +447,15 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    [mSpriteGameWin stopAllActions];
+    [mSpriteGameLose stopAllActions];
     if( buttonIndex == 0 ) // 취소
     {
         [[CCDirector sharedDirector]pushScene:[GameMainScene node]];
     }
     else if( buttonIndex == 1 ) //확인 
     {
-        [self IntroEnd];
+        [self GameStart];
     }
 }
 

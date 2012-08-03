@@ -7,26 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "User.h"
 
-@interface Client : NSObject
+@interface Packet : NSObject
 
-@property (nonatomic) NSInteger mSocket;
+@property (strong, nonatomic) NSNumber* mState;
+@property (strong, nonatomic) NSNumber* mRoom;
+@property (strong, nonatomic) NSNumber* mPlayer;
+@property (strong, nonatomic) NSNumber* mX;
+@property (strong, nonatomic) NSNumber* mY;
+@property (strong, nonatomic) NSNumber* mHost;
 
-@property (strong, nonatomic) NSString* mState;
-@property (strong, nonatomic) NSString* mRoom;
-@property (strong, nonatomic) NSString* mPlayer;
-@property (strong, nonatomic) NSString* mX;
-@property (strong, nonatomic) NSString* mY;
-@property (strong, nonatomic) NSString* mHost;
-@property (strong, nonatomic) NSString* mGameStart;
-
-@property (strong, nonatomic) NSThread* mThread;
-
-+(Client*)sharedClient;
--(void)StartThread;
--(id)init;
--(int)connect:(NSString*)host port:(unsigned short)port;
--(int)send;
--(int)receive;
--(void)close;
+-(void)SetPacketWithUser:(User*) user;
 @end

@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class Packet;
+
 @interface ServerAdapter : NSObject
+
+@property (nonatomic) NSInteger mSocket;
+@property (nonatomic) BOOL mServerOn;
+
++(ServerAdapter*)sharedServerAdapter;
+-(int)connect;
+-(int)send:(Packet*)packet;
+-(Packet*)receive;
 
 @end

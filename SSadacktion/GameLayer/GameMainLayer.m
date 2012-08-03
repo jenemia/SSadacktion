@@ -8,18 +8,28 @@
 
 #import "GameMainLayer.h"
 #import "GamePlayScene.h"
-#import "Client.h"
+#import "ServerAdapter.h"
+#import "Packet.h"
+#import "User.h"
 
 enum{
     kTagBacground = 0,
     kTagMenu
 };
 
+enum{
+    pTagInit = 0,
+    pTagWait,
+    pTagStart
+};
+
+
 @implementation GameMainLayer
 
-@synthesize mMenuGameStart;
+@synthesize mMenuGameStart,mMenuGameStartWithServer;
 @synthesize mSpriteBackground;
-@synthesize mClient;
+@synthesize mReceivePacket;
+
 
 -(id)init
 {
@@ -32,40 +42,36 @@ enum{
         [mSpriteBackground setPosition:CGPointMake(0, 0)];
         [self addChild:mSpriteBackground z:kTagBacground tag:kTagBacground];
         
-//        mClient = [Client sharedClient];
-//        [mClient StartThread];
-//        if( [mClient.mHost isEqualToString:@"1"]) // host
-        {
-            mMenuGameStart = [CCMenuItemImage itemFromNormalImage:@"menu_start.png" selectedImage:@"menu_start_s.png" target:self selector:@selector(GamemenuStart)];
-            
-            CCMenu* menu = [CCMenu menuWithItems:mMenuGameStart, nil];
-            
-            [menu alignItemsVertically];
-                
-            [self addChild:menu z:kTagMenu tag:kTagMenu];
-        } 
-//        else ///guest
-        {
-//            [self schedule:@selector(wait)];
-        }
+        mMenuGameStart = [CCMenuItemImage itemFromNormalImage:@"menu_start.png" selectedImage:@"menu_start_s.png" target:self selector:@selector(GameMenuStart)];
+        mMenuGameStartWithServer = [CCMenuItemImage itemFromNormalImage:@"menu_start.png" selectedImage:@"menu_start_s.png" target:self selector:@selector(GameMenuStartWithServer)];
         
+        CCMenu* menu = [CCMenu menuWithItems:mMenuGameStart,mMenuGameStartWithServer, nil];
+        [menu alignItemsVertically];
+        
+        [self addChild:menu z:kTagMenu tag:kTagMenu];
     }
     return self;
 }
 
--(void)wait
-{
-    usleep(100);
-    while( !mClient.mGameStart );
-    
-    [self GamemenuStart];
+-(void)GameMenuStart
+{    
+    [[CCDirector sharedDirector]pushScene:[GamePlayScene node]];
 }
 
--(void)GamemenuStart
+-(void)GameMenuStartWithServer
 {
-//        mClient.mState = @"1";
-//        [mClient send];
-//        while( !mClient.mGameStart );
+    Packet* _packet = [[Packet alloc]init];
+    _packet.mState = [NSNumber numberWithInt:pTagInit];
+    ServerAdapter* server = [ServerAdapter sharedServerAdapter];
+    [server connect];
+    server.mServerOn = TRUE;
+    [server send:_packet];
+    mReceivePacket = [server receive];
+    
+    User* user = [User sharedUser];
+    user.mPlayer = mReceivePacket.mPlayer;
+    user.mRoom = mReceivePacket.mRoom;
+    user.mHost = mReceivePacket.mHost;
     
     [[CCDirector sharedDirector]pushScene:[GamePlayScene node]];
 }

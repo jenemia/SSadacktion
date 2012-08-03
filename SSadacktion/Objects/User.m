@@ -10,4 +10,42 @@
 
 @implementation User
 
+@synthesize mRoom, mPlayer, mHost;
+
+
+static User* _shreadUser;
+
++(User*)sharedUser
+{
+    @synchronized( [User class] )
+    {
+        if( !_shreadUser )
+            [[self alloc]init];
+        return _shreadUser;
+    }
+    
+    return nil;
+}
+
++(id)alloc
+{
+    @synchronized( [User class] )
+    {
+        _shreadUser = [super alloc];
+        return _shreadUser;
+    }
+    return nil;
+}
+
+-(id)init
+{
+    if( self = [super init] )
+    {
+        mRoom = [[NSNumber alloc]initWithInt:0];
+        mPlayer = [[NSNumber alloc]initWithInt:0];
+        mHost = [[NSNumber alloc]initWithInt:0];
+    }
+    return self;
+}
+
 @end

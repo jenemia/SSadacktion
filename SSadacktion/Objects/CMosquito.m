@@ -51,8 +51,7 @@
 //IntroEnd, Touch 두 곳
 -(void)moveStart
 {
-    [GamePlayLayer BoolTouch:true];
-    [GamePlayLayer displayMosquito]; //게임화면 모기 카운트 늘리고
+    self.position = CGPointMake(10, 300); //초기 위치
     mTimeCount = 0;
     mMoveVelocityX = rand()%10;
     mMoveVelocityY = rand()%10;

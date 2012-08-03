@@ -8,7 +8,7 @@
 
 #import "cocos2d.h"
 
-@class Client;
+@class Packet;
 
 @interface GameMainLayer : CCLayer
 {
@@ -17,7 +17,8 @@
 
 @property (strong, nonatomic) CCSprite* mSpriteBackground;
 @property (strong, nonatomic) CCMenuItem* mMenuGameStart;
-@property (strong, nonatomic) Client* mClient;
+@property (strong, nonatomic) CCMenuItem* mMenuGameStartWithServer;
+@property (strong, nonatomic) Packet* mReceivePacket;
 -(id)init;
 
 @end
