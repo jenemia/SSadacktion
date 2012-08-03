@@ -15,6 +15,7 @@
 
 #define ImageWidth 230
 #define ImageHeight 306
+#define MosquitoScheduleTimeCount 0.05
 
 enum{
     kTagBackground = 0,
@@ -29,8 +30,18 @@ enum{
 enum{
     pTagInit = 0,
     pTagWait,
-    pTagStart
+    pTagStart,
+    pTagMove
 };
+
+
+enum{
+    mTagMove = 0,
+    mTagSpot,
+    mtagStay,
+    mTagAviod
+};
+
 
 //지나간 모기 수
 static CCLabelTTF* gLabelMosquitoCount;
@@ -293,9 +304,11 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
         mReceivePacket = [mServerAdapter receive];
         if( [mReceivePacket.mState intValue] == pTagStart ) //서버에서 게임 시작을 알리면.
         {
+            mUser.mHost = mReceivePacket.mHost;
+            mUser.mPlayer = mReceivePacket.mPlayer;
+            mUser.mRoom = mReceivePacket.mRoom;
             break;
         }
-        NSLog(@"wait");
     }
     
     //게임 접속 후 3초 후 시작
@@ -335,7 +348,71 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     [self displayMosquito]; //모기 카운트 늘린다
     gBoolTouch = TRUE;
     mSpriteMosquite.mTimeTarget = 1.5f;
-    [mSpriteMosquite moveStart];
+    [mSpriteMosquite moveSetting];
+    [self schedule:@selector(GameMosquitoMove) interval:MosquitoScheduleTimeCount];
+}
+
+//모기 움직임 관리
+-(void)GameMosquitoMove
+{
+    if( [mUser.mHost intValue] )
+    {
+        switch (mSpriteMosquite.mState) {
+            case mTagMove :
+                if( [mSpriteMosquite isMove] ) //move 조건이 끝났을 때 다음 단계로
+                {
+                    mSpriteMosquite.mState = mTagSpot;
+                    [mSpriteMosquite moveSpotSetting];
+                }
+                else
+                    [mSpriteMosquite move];
+                break;
+            case mTagSpot :
+                if( [mSpriteMosquite isMoveSpot] )
+                {
+                    mSpriteMosquite.mState = mtagStay;                
+                }
+                else 
+                    [mSpriteMosquite moveSpot];                
+                
+                break;
+            case mtagStay :
+                if( [mSpriteMosquite isMoveStay] )
+                {
+                    mSpriteMosquite.mState = mTagAviod;
+                }
+                [mSpriteMosquite moveStay];
+                break;
+            case mTagAviod :
+                if( [mSpriteMosquite isMoveAvoid] )
+                {
+                    mSpriteMosquite.mState = mTagMove;
+                    [mSpriteMosquite moveSetting];
+                }
+                else
+                    [mSpriteMosquite moveAvoid];
+                break;
+            default:
+                break;
+        }
+    
+        Packet* sendPacket = [[Packet alloc]init];
+        sendPacket.mState = [NSNumber numberWithInt:pTagMove];
+        [sendPacket SetPacketWithUser:mUser];
+        sendPacket.mX = [NSNumber numberWithInt:mSpriteMosquite.position.x];
+        sendPacket.mY = [NSNumber numberWithInt:mSpriteMosquite.position.y];
+    
+        [mServerAdapter send:sendPacket];
+    }
+
+    mReceivePacket = [mServerAdapter receive];
+    if( ![mUser.mHost intValue] )
+    {
+        CGPoint newPo = CGPointMake([mReceivePacket.mX intValue], [mReceivePacket.mY intValue]);
+        [mSpriteMosquite setPosition:newPo];
+        NSLog(@"new");
+    }
+    
 }
 
 -(void)GameFlowTime
@@ -409,7 +486,8 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
                 
                 [mSpriteMosquite LevelUp];
                 mSpriteMosquite.position = CGPointMake(10, 300);
-                [mSpriteMosquite moveStart];
+                [mSpriteMosquite moveSetting];
+                mSpriteMosquite.mState = mTagMove;
             }
             else  //실패, 싸다구
             {
@@ -432,7 +510,8 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
                 }
                 
                 mSpriteMosquite.position = CGPointMake(10, 300); //모기의 처음 위치
-                [mSpriteMosquite moveStart];
+                [mSpriteMosquite moveSetting];
+                mSpriteMosquite.mState = mTagMove;
             }
                         
         }

@@ -15,6 +15,7 @@
 @property (nonatomic) NSInteger mTimeCount;
 @property (nonatomic) CGFloat mTimeTarget;
 @property (nonatomic) CGFloat mTimeStay;
+@property (nonatomic) NSInteger mState;
 
 @property (nonatomic) NSInteger mMoveVelocityX;
 @property (nonatomic) NSInteger mMoveVelocityY;
@@ -22,7 +23,20 @@
 @property (strong,nonatomic) SoundManager* mSoundManager; 
 
 -(void)initNotAlloc;
--(void)moveStart;
+-(void)moveSetting;
 -(BOOL)checkCollision;
 -(void)LevelUp;
+
+-(void)moveSetting;
+-(void)moveSpotSetting;
+
+-(void)move;
+-(void)moveSpot;
+-(void)moveStay;
+-(void)moveAvoid;
+
+-(BOOL)isMove;
+-(BOOL)isMoveSpot;
+-(BOOL)isMoveStay;
+-(BOOL)isMoveAvoid;
 @end

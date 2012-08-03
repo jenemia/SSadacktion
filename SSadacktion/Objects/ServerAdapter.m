@@ -59,7 +59,7 @@ static ServerAdapter* _shreadServerAdapter;
 -(int)connect
 {
     NSString* host = [[NSString alloc]initWithFormat:@"211.210.124.11"];
-    unsigned short port = 555;
+    unsigned short port = 5555;
     struct hostent* ent;
     ent = gethostbyname([host UTF8String]);
     if( !ent )
@@ -110,7 +110,7 @@ static ServerAdapter* _shreadServerAdapter;
     len = read(mSocket, text, 1024);
 
     NSString* _recevieStr = [[NSString alloc]initWithFormat:@"%s",text];
-    NSLog(@"receive : %@", _recevieStr);
+//    NSLog(@"receive : %@", _recevieStr);
     NSDictionary* dic = [_recevieStr JSONValue];
     
     Packet* result = [[Packet alloc]init];
