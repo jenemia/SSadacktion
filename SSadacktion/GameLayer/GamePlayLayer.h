@@ -11,6 +11,7 @@
 @class CMosquito;
 @class Packet, ServerAdapter;
 @class User;
+@class SoundManager;
 
 @interface GamePlayLayer : CCLayer <UIAlertViewDelegate>
 
@@ -50,6 +51,5 @@
 @property (strong, nonatomic) User* mUser;
 
 @property (strong, nonatomic) NSThread* mReceiveThread;
-
-+(void)BoolTouch:(BOOL)result;
+@property (strong, nonatomic) SoundManager* mSoundManager;
 @end

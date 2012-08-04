@@ -7,7 +7,6 @@
 //
 
 #import "CMosquito.h"
-#import "GamePlayLayer.h"
 #import "SoundManager.h"
 
 #define scheduleTimeCount 0.05
@@ -39,7 +38,6 @@ enum{
         mTimeStay = 0.25;
         mMoveVelocityX = 0;
         mMoveVelocityY = 0;
-        mSoundManager = [SoundManager sharedSoundManager];
     }
     return self;
 }
@@ -51,7 +49,6 @@ enum{
     mTimeStay = 0.25;
     mMoveVelocityX = 0;
     mMoveVelocityY = 0;
-    [self unscheduleAllSelectors];
 }
 
 //모기 움직이기 시작
@@ -63,9 +60,6 @@ enum{
     mMoveVelocityX = rand()%10;
     mMoveVelocityY = rand()%10;
     mState = mTagMove;
-    
-    [self unscheduleAllSelectors];
-    [mSoundManager playSystemSound:@"mosquito" fileType:@"wav"];
 }
 
 //스케쥴로써 모기는 움직인다.
@@ -122,7 +116,6 @@ enum{
 
 -(BOOL)isMoveSpot
 {
-    
     if( mTimeCount == 5 ) // 목표지점까지 갔다면 스케쥴로 끝.
     {
         mTimeCount = 0;
@@ -170,10 +163,6 @@ enum{
 
 -(void)LevelUp
 {
-    //충돌
-    NSLog(@"충돌");
-    [self unscheduleAllSelectors]; //모든 스케쥴러 정지
-    
     mTimeTarget -= 0.2;
     if( mTimeTarget <= 0.5 )
         mTimeTarget = 0.5;
@@ -195,11 +184,9 @@ enum{
            if( (position.y >= spotY-imageHeight && position.y <= spotY) ||
               (position.y-imageHeight >= spotY-imageHeight && position.y-imageHeight <= spotY) )
            {
-               [mSoundManager playSystemSound:@"hit" fileType:@"aif"];
                return TRUE;
            }
        }
-   [mSoundManager playSystemSound:@"ssadacktion" fileType:@"aif"];
     mTimeTarget += 0.2; //실패 했을 때 모기 체공시간을 늘린다.
     mTimeStay += 0.01;
     return FALSE;

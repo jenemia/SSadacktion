@@ -12,6 +12,7 @@
 #import "Packet.h"
 #import "ServerAdapter.h"
 #import "User.h"
+#import "SoundManager.h"
 
 #define ImageWidth 230
 #define ImageHeight 306
@@ -46,7 +47,6 @@ enum{
 
 
 //지나간 모기 수
-static CCLabelTTF* gLabelMosquitoCount;
 static NSInteger gMosquitoCount = 0;
 
 //잡은 모기 수
@@ -70,6 +70,7 @@ BOOL gBoolReceive = true;
 @synthesize mReceivePacket, mServerAdapter;
 @synthesize mUser;
 @synthesize mReceiveThread;
+@synthesize mSoundManager;
 -(id)init
 {
     if( self = [super init] )
@@ -107,6 +108,8 @@ BOOL gBoolReceive = true;
         
         mServerAdapter = [ServerAdapter sharedServerAdapter];
         mUser = [User sharedUser];
+        
+        mSoundManager = [SoundManager sharedSoundManager];
         
         //서버를 연결 했다면 기다렸다가 시작
         if( mServerAdapter.mServerOn )
@@ -229,12 +232,6 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     gLabelScore.visible = false;
     [self addChild:gLabelScore z:kTagLabel tag:kTagLabel];
     
-    gLabelMosquitoCount = [CCLabelTTF labelWithString:@"Mosquito : 0" fontName:@"Arial" fontSize:18];
-    gLabelMosquitoCount.anchorPoint = CGPointMake(0, 0);
-    gLabelMosquitoCount.position = CGPointMake(200, 420);
-    gLabelMosquitoCount.visible = false;
-    [self addChild:gLabelMosquitoCount z:kTagLabel tag:kTagLabel];
-    
     mLabelHp = [CCLabelTTF labelWithString:@"Hp : 5" fontName:@"Arial" fontSize:18];
     mLabelHp.anchorPoint = CGPointMake(0, 0);
     mLabelHp.position = CGPointMake(200, 390);
@@ -252,13 +249,6 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     [gLabelScore setString:str];
 }
 
-//모기 숫자 올라감
--(void)displayMosquito
-{
-    NSString* str = [[NSString alloc]initWithFormat:@"Mosquito : %d", gMosquitoCount];
-    [gLabelMosquitoCount setString:str];
-}
-
 -(void)displayGameTime
 {
     NSString* str = [[NSString alloc]initWithFormat:@"%d", mGameTime];
@@ -271,11 +261,6 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     [mLabelHp setString:str];    
 }
 
-+(void)BoolTouch:(BOOL)result
-{
-    gBoolTouch = result;
-}
-
 -(void)completeAnimate
 {
     NSLog(@"compelete");
@@ -284,10 +269,11 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     [mSpriteCatch stopAllActions];
     [mSpriteAttack_left stopAllActions];
     
-    gBoolTouch = true;
     mSpriteCatch.visible = false;
     mSpriteAttack_left.visible = false;
     mSpriteAttack_right.visible = false;
+    
+    gBoolTouch = true;
 }
 
 #pragma mark UIAlertViewDelegate
@@ -314,30 +300,30 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     {
         if( gBoolTouch == true )
         {
+            
+            NSLog(@"touch");
             gBoolTouch = false;
+            Packet* sendPacket = [[Packet alloc]init];
             
             if( [mSpriteMosquite checkCollision] ) //모기 충돌 체크
             {
-                [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateReadyPlayer1, nil]];
-                [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateReadyPlayer2, nil]];
-                
-                mSpriteCatch.visible = true;
-                id action = [CCDelayTime actionWithDuration:0.6f];
-                [mSpriteCatch runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];
-                
-                [mSpriteMosquite LevelUp];
-                mSpriteMosquite.position = CGPointMake(10, 300);
-                [mSpriteMosquite moveSetting];
-                mSpriteMosquite.mState = mTagMove;
-                
-                gMosquitoCount++;
-                [self displayScore];
+                if( mServerAdapter.mServerOn )
+                {
+                    sendPacket.mState = [NSNumber numberWithInt:pTagSuccess];
+                    [sendPacket SetPacketWithUser:mUser];
+                    sendPacket.mX = [NSNumber numberWithInt:1];
+                    sendPacket.mY = [NSNumber numberWithInt:1];
+                    [mServerAdapter send:sendPacket];
+                }
+                else
+                {
+                    [self CatchSuccess];
+                }
             }
             else  //실패, 싸다구
             {
                 if( mServerAdapter.mServerOn )
                 {
-                    Packet* sendPacket = [[Packet alloc]init];
                     sendPacket.mState = [NSNumber numberWithInt:pTagFail];
                     [sendPacket SetPacketWithUser:mUser];
                     sendPacket.mX = [NSNumber numberWithInt:1];
@@ -349,7 +335,6 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
                     [self CatchFail];
                 }
             }
-            
         }
     }
 }
@@ -404,7 +389,6 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     //모기,display화면에 출력
     mSpriteMosquite.visible = true;
     gLabelScore.visible = true;
-    gLabelMosquitoCount.visible = true;
     mLabelGameTime.visible = true;
     mLabelHp.visible = true;
     
@@ -420,11 +404,11 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     gBoolReceive = true;
     [mReceiveThread start];
     
+    gBoolTouch = true;
     
-    [self displayMosquito]; //모기 카운트 늘린다
-    gBoolTouch = TRUE;
     mSpriteMosquite.mTimeTarget = 1.5f;
     [mSpriteMosquite moveSetting];
+    [mSoundManager playSystemSound:@"mosquito" fileType:@"wav"];
     [self schedule:@selector(GameMosquitoMove) interval:MosquitoScheduleTimeCount];
 }
 
@@ -463,9 +447,8 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
                 if( [mSpriteMosquite isMoveAvoid] ) //모기가 다 피하고
                 {
                     mSpriteMosquite.mState = mTagMove; 
-                    [mSpriteMosquite moveSetting]; //새로시작
-                    
-                    [self displayMosquito]; //모기 카운트 늘린다
+                    [mSpriteMosquite moveSetting]; //새로시작                       
+                    [mSoundManager playSystemSound:@"mosquito" fileType:@"wav"];                 
                 }
                 else
                     [mSpriteMosquite moveAvoid];
@@ -529,7 +512,6 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     mHp = 0;
     mLabelGameTime.visible = false;
     gLabelScore.visible = false;
-    gLabelMosquitoCount.visible = false;
     mLabelHp.visible = false;
     
     sleep(1);
@@ -551,32 +533,54 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
                     [mSpriteMosquite setPosition:newPo];
                 }
                 break;
+            case pTagSuccess :
+                [self performSelectorOnMainThread:@selector(CatchSuccess) withObject:nil waitUntilDone:YES];
+                break;
             case pTagFail :
                 [self performSelectorOnMainThread:@selector(CatchFail) withObject:nil waitUntilDone:YES];
                 break;
-                
             default:
                 break;
         }
     }
 }
 
+-(void)CatchSuccess
+{   
+    [mSoundManager playSystemSound:@"hit" fileType:@"aif"];
+    [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateReadyPlayer1, nil]];
+    [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateReadyPlayer2, nil]];
+    
+    mSpriteCatch.visible = true;
+    id action = [CCDelayTime actionWithDuration:0.6f];
+    [mSpriteCatch runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];
+    
+    [mSpriteMosquite LevelUp];
+    mSpriteMosquite.position = CGPointMake(10, 300);
+    [mSpriteMosquite moveSetting];
+    mSpriteMosquite.mState = mTagMove;
+    
+    gMosquitoCount++;
+    [self displayScore];
+}
+
 -(void)CatchFail
 {
+    [mSoundManager playSystemSound:@"ssadacktion" fileType:@"aif"];
     id action = [CCDelayTime actionWithDuration:0.6f];   
     if( [mReceivePacket.mHost intValue] ) //host는 왼쪽
     {
-        [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateReadyPlayer1, nil]];
+        [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateReadyPlayer2, nil]]; //오른쪽이 때리고
         
         mSpriteAttack_left.visible = true;      
-        [mSpriteAttack_left runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];                     
-    }
+        [mSpriteAttack_left runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];//왼쪽이 맞음  
+    } 
     else  // 오른쪽
     {
-        [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateReadyPlayer2, nil]];
+        [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateReadyPlayer1, nil]]; //왼쪽이 때리고
         
         mSpriteAttack_right.visible = true;
-        [mSpriteAttack_right runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];                     
+        [mSpriteAttack_right runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]]; //오른쪽이 맞음              
     }
     
     mHp--;
@@ -590,8 +594,6 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     mSpriteMosquite.position = CGPointMake(10, 300); //모기의 처음 위치
     [mSpriteMosquite moveSetting];
     mSpriteMosquite.mState = mTagMove;
-    //gBoolTouch = true;
-    
 }
 
 @end
