@@ -51,7 +51,5 @@
 
 @property (strong, nonatomic) NSThread* mReceiveThread;
 
-+(void)displayScore;
-//-(void)displayMosquito;
 +(void)BoolTouch:(BOOL)result;
 @end

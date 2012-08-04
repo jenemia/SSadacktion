@@ -182,8 +182,6 @@ enum{
     if( mTimeStay <= 0.15 )
         mTimeStay = 0.15;
     
-    [GamePlayLayer displayScore]; //점수 올리기
-    
     mTimeCount = 0;
 }
 
