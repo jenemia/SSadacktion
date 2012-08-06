@@ -60,11 +60,13 @@ enum{
 
 -(void)GameMenuStartWithServer
 {
-    Packet* _packet = [[Packet alloc]init];
-    _packet.mState = [NSNumber numberWithInt:pTagInit];
+    //서버 접속
     ServerAdapter* server = [ServerAdapter sharedServerAdapter];
     [server connect];
     server.mServerOn = TRUE;
+    
+    Packet* _packet = [[Packet alloc]init];
+    _packet.mState = [NSNumber numberWithInt:pTagInit];
     [server send:_packet];
     mReceivePacket = [server receive];
     

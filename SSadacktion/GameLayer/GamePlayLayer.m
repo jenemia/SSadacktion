@@ -69,7 +69,7 @@ BOOL gBoolReceive = true;
 @synthesize mGameStart;
 @synthesize mReceivePacket, mServerAdapter;
 @synthesize mUser;
-@synthesize mReceiveThread;
+@synthesize mReceiveThread, mWattingThread;
 @synthesize mSoundManager;
 -(id)init
 {
@@ -115,13 +115,9 @@ BOOL gBoolReceive = true;
         if( mServerAdapter.mServerOn )
         {
             mReceivePacket = [[Packet alloc]init];
-            [mServerAdapter connect];
-            [self schedule:@selector(GameWaitting) interval:0.05];
-//            NSThread* waitThread = [[NSThread alloc]initWithTarget:self selector:@selector(GameWaitting) object:nil];
-//            [waitThread start];
             
-            //서버의 패킷을 계속 받기 위하여
-            mReceiveThread = [[NSThread alloc]initWithTarget:self selector:@selector(ReceivingServer) object:nil];
+            mWattingThread = [[NSThread alloc]initWithTarget:self selector:@selector(GameWaitting) object:nil];
+            [mWattingThread start];
             gBoolReceive = true;
         }
         else // 솔로 플레이
@@ -279,8 +275,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [mSpriteGameWin stopAllActions];
-    [mSpriteGameLose stopAllActions];
+    sleep(1);
     if( buttonIndex == 0 ) // 취소
     {
         [[CCDirector sharedDirector]pushScene:[GameMainScene node]];
@@ -350,6 +345,8 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
 {
     while(true)
     {
+        [NSThread sleepForTimeInterval:0.1];
+        
         Packet* sendPacket = [[Packet alloc]init];
         sendPacket.mState = [NSNumber numberWithInt:pTagWait];
         [sendPacket SetPacketWithUser:mUser];
@@ -359,9 +356,6 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
         mReceivePacket = [mServerAdapter receive];
         if( [mReceivePacket.mState intValue] == pTagStart ) //서버에서 게임 시작을 알리면.
         {
-            mUser.mHost = mReceivePacket.mHost;
-            mUser.mPlayer = mReceivePacket.mPlayer;
-            mUser.mRoom = mReceivePacket.mRoom;
             break;
         }
     }
@@ -398,10 +392,12 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     mSpriteGameWin.visible = false;
     mSpriteGameLose.visible = false;
     
-    [self schedule:@selector(GameFlowTime) interval:1.0f]; //30초 제한 카운트
-    //[self schedule:@selector(ReceivingServer) interval:MosquitoScheduleTimeCount];
+   // [self schedule:@selector(GameFlowTime) interval:1.0f]; //30초 제한 카운트
     
     gBoolReceive = true;
+    
+    //서버의 패킷을 계속 받기 위하여
+    mReceiveThread = [[NSThread alloc]initWithTarget:self selector:@selector(ReceivingServer) object:nil];
     [mReceiveThread start];
     
     gBoolTouch = true;
@@ -506,6 +502,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     [mSpriteMosquite initNotAlloc];
     mSpriteMosquite.visible = false;
     [self unscheduleAllSelectors];
+    [mReceiveThread cancel]; 
     mGameTime = 0;
     gScore = 0;
     gMosquitoCount = 0;
@@ -514,13 +511,13 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     gLabelScore.visible = false;
     mLabelHp.visible = false;
     
-    sleep(1);
     [mAlertView show]; //게임 재시작 또는 취소 여부 묻는 경고창.
     NSLog(@"게임종료");
 }
 
 -(void)ReceivingServer
 {
+    //게임이 종료상황( win, lose )일 때 멈추기 위하여, 재시작할때는 다시 수행.
     while(gBoolReceive)
     {
         [NSThread sleepForTimeInterval:0.03];
@@ -545,16 +542,21 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     }
 }
 
+
+//모기 잡는 것이 성공할 때
 -(void)CatchSuccess
 {   
     [mSoundManager playSystemSound:@"hit" fileType:@"aif"];
+    //팔동작
     [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateReadyPlayer1, nil]];
     [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateReadyPlayer2, nil]];
     
+    //가운데에 모기 잡는 모션
     mSpriteCatch.visible = true;
     id action = [CCDelayTime actionWithDuration:0.6f];
     [mSpriteCatch runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];
     
+    //모기 레벨 업
     [mSpriteMosquite LevelUp];
     mSpriteMosquite.position = CGPointMake(10, 300);
     [mSpriteMosquite moveSetting];
@@ -564,23 +566,26 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     [self displayScore];
 }
 
+//모기 잡는 것이 실패할 때
 -(void)CatchFail
 {
     [mSoundManager playSystemSound:@"ssadacktion" fileType:@"aif"];
-    id action = [CCDelayTime actionWithDuration:0.6f];   
+    id action = [CCDelayTime actionWithDuration:0.6f];  
+    
+    //보낸 사람이 Host(왼쪽) 라면 
     if( [mReceivePacket.mHost intValue] ) //host는 왼쪽
-    {
-        [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateReadyPlayer2, nil]]; //오른쪽이 때리고
-        
-        mSpriteAttack_left.visible = true;      
-        [mSpriteAttack_left runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];//왼쪽이 맞음  
-    } 
-    else  // 오른쪽
     {
         [mSpriteNomalPlayer1 runAction:[CCSequence actions:mAnimateReadyPlayer1, nil]]; //왼쪽이 때리고
         
-        mSpriteAttack_right.visible = true;
-        [mSpriteAttack_right runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]]; //오른쪽이 맞음              
+        mSpriteAttack_right.visible = true;      
+        [mSpriteAttack_right runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]];//오른쪽이 맞음  
+    } 
+    else
+    {
+        [mSpriteNomalPlayer2 runAction:[CCSequence actions:mAnimateReadyPlayer2, nil]]; //오른쪽이 때리고
+        
+        mSpriteAttack_left.visible = true;
+        [mSpriteAttack_left runAction:[CCSequence actions:action, [CCCallFunc actionWithTarget:self selector:@selector(completeAnimate)], nil]]; //왼쪽이 맞음              
     }
     
     mHp--;

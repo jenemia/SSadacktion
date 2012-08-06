@@ -253,24 +253,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GameMainLayer.m"
-         timestampString = "365307210.583234"
+         timestampString = "365861252.812302"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "74"
-         endingLineNumber = "74"
-         landmarkName = "-GameMenuStartWithServer"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "SSadacktion/GameLayer/GameMainLayer.m"
-         timestampString = "365266436.393118"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "63"
-         endingLineNumber = "63"
+         startingLineNumber = "76"
+         endingLineNumber = "76"
          landmarkName = "-GameMenuStartWithServer"
          landmarkType = "5">
       </FileBreakpoint>
@@ -331,11 +318,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "365759873.410822"
+         timestampString = "365912444.496354"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "569"
-         endingLineNumber = "569"
+         startingLineNumber = "572"
+         endingLineNumber = "572"
          landmarkName = "-CatchFail"
          landmarkType = "5">
       </FileBreakpoint>
@@ -344,11 +331,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "365759873.410822"
+         timestampString = "365912444.496354"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "570"
-         endingLineNumber = "570"
+         startingLineNumber = "574"
+         endingLineNumber = "574"
          landmarkName = "-CatchFail"
          landmarkType = "5">
       </FileBreakpoint>
@@ -357,11 +344,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "365759873.410822"
+         timestampString = "365912444.496354"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "571"
-         endingLineNumber = "571"
+         startingLineNumber = "576"
+         endingLineNumber = "576"
          landmarkName = "-CatchFail"
          landmarkType = "5">
       </FileBreakpoint>
@@ -370,11 +357,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "365759873.410822"
+         timestampString = "365862393.02135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "313"
-         endingLineNumber = "313"
+         startingLineNumber = "308"
+         endingLineNumber = "308"
          landmarkName = "-ccTouchesBegan:withEvent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -383,12 +370,38 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
-         timestampString = "365759873.410822"
+         timestampString = "365862393.02135"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "299"
-         endingLineNumber = "299"
+         startingLineNumber = "294"
+         endingLineNumber = "294"
          landmarkName = "-ccTouchesBegan:withEvent:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
+         timestampString = "365862393.02135"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "285"
+         endingLineNumber = "285"
+         landmarkName = "-alertView:clickedButtonAtIndex:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SSadacktion/GameLayer/GamePlayLayer.m"
+         timestampString = "365911681.407802"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "356"
+         endingLineNumber = "356"
+         landmarkName = "-GameWaitting"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

@@ -51,5 +51,6 @@
 @property (strong, nonatomic) User* mUser;
 
 @property (strong, nonatomic) NSThread* mReceiveThread;
+@property (strong, nonatomic) NSThread* mWattingThread;
 @property (strong, nonatomic) SoundManager* mSoundManager;
 @end
