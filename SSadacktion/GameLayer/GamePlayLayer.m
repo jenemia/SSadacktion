@@ -118,7 +118,6 @@ BOOL gBoolReceive = true;
             
             mWattingThread = [[NSThread alloc]initWithTarget:self selector:@selector(GameWaitting) object:nil];
             [mWattingThread start];
-            gBoolReceive = true;
         }
         else // 솔로 플레이
         {
@@ -275,14 +274,19 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
 #pragma mark UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    sleep(1);
+    sleep(1); //Win or Lose 1초동안 보여주기 위하여
+    
+    [self removeChild:mSpriteGameWin cleanup:YES];
+    [self removeChild:mSpriteGameLose cleanup:YES];
+    
     if( buttonIndex == 0 ) // 취소
     {
         [[CCDirector sharedDirector]pushScene:[GameMainScene node]];
     }
     else if( buttonIndex == 1 ) //확인 
     {
-        [self GameStart];
+        mWattingThread = [[NSThread alloc]initWithTarget:self selector:@selector(GameWaitting) object:nil];
+        [mWattingThread start];
     }
 }
 
@@ -356,20 +360,21 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
         mReceivePacket = [mServerAdapter receive];
         if( [mReceivePacket.mState intValue] == pTagStart ) //서버에서 게임 시작을 알리면.
         {
+            [mWattingThread cancel];
             break;
         }
     }
     
     //게임 접속 후 3초 후 시작
-    [self unschedule:@selector(GameWaitting)];
     mTimeCount = 0;
-    [mSpriteStartIntro runAction:[CCSequence actions:mAnimateStartIntro, [CCCallFunc actionWithTarget:self selector:@selector(GameStart)],nil]];    
+    [mSpriteStartIntro runAction:[CCSequence actions:mAnimateStartIntro, [CCCallFunc actionWithTarget:self selector:@selector(GameStart)],nil]];
 }
 
 
 //start intro 끝나고 나서 호출됨.
 -(void)GameStart
 {
+    [mSpriteStartIntro stopAllActions];
     [self unscheduleAllSelectors];
     //인트로 끝내고, display초기화
     mSpriteStartIntro.visible = FALSE;
@@ -399,6 +404,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
     //서버의 패킷을 계속 받기 위하여
     mReceiveThread = [[NSThread alloc]initWithTarget:self selector:@selector(ReceivingServer) object:nil];
     [mReceiveThread start];
+    gBoolReceive = true;
     
     gBoolTouch = true;
     
@@ -474,14 +480,7 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
 }
 
 -(void)GameEnd
-{
-    NSLog(@"GameEnd");
-    gBoolTouch = false;
-    mSpriteAttack_left.visible = false;
-    mSpriteAttack_right.visible = false;
-    mSpriteCatch.visible = false;
-    gBoolReceive = false;
-    
+{   
     if( mHp >= 1 )
     {
         NSLog(@"win");
@@ -498,21 +497,29 @@ CCAnimation* animation = [CCAnimation animationWithFrames:aniFrame delay:delay];
         mSpriteGameLose.position = CGPointMake(50, 320);
         [self addChild:mSpriteGameLose z:kTagIntro tag:kTagIntro];
     }
-
+    
     [mSpriteMosquite initNotAlloc];
     mSpriteMosquite.visible = false;
-    [self unscheduleAllSelectors];
-    [mReceiveThread cancel]; 
-    mGameTime = 0;
-    gScore = 0;
-    gMosquitoCount = 0;
-    mHp = 0;
+    
+    gBoolTouch = false;
+    gBoolReceive = false;
+    mSpriteAttack_left.visible = false;
+    mSpriteAttack_right.visible = false;
+    mSpriteCatch.visible = false;
+    
     mLabelGameTime.visible = false;
     gLabelScore.visible = false;
     mLabelHp.visible = false;
     
+    mGameTime = 0;
+    gScore = 0;
+    gMosquitoCount = 0;
+    mHp = 0;
+    
+    [mReceiveThread cancel]; 
+    [self unscheduleAllSelectors];
+
     [mAlertView show]; //게임 재시작 또는 취소 여부 묻는 경고창.
-    NSLog(@"게임종료");
 }
 
 -(void)ReceivingServer
